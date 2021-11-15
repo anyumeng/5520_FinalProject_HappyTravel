@@ -1,5 +1,8 @@
 plugins {
     id 'com.android.application'
+
+    // Spotless to format code easily
+    id "com.diffplug.spotless"
 }
 
 android {
@@ -35,4 +38,19 @@ dependencies {
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+}
+
+spotless {
+    format 'misc', {
+        target '**/*.gradle', '**/*.md', '**/.gitignore'
+        targetExclude 'build/**'
+
+        trimTrailingWhitespace()
+        indentWithSpaces()
+        endWithNewline()
+    }
+    java {
+        targetExclude 'build/**'
+        googleJavaFormat().aosp()
+    }
 }
