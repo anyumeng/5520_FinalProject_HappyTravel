@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/imgPopupProfile"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:src="@mipmap/defaultphoto"
+        app:civ_border_color="@color/white"
+        app:civ_border_width="2dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="50dp"/>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/relativeParent1"
+        app:layout_constraintTop_toBottomOf="@+id/imgPopupProfile"
+        app:layout_constraintStart_toStartOf="@+id/imgPopupProfile"
+        app:layout_constraintEnd_toEndOf="@+id/imgPopupProfile"
+        android:layout_marginTop="20dp">
+
+        <TextView
+            android:id="@+id/tvPopupUserName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="UserName"
+            android:textSize="15dp"/>
+
+        <EditText
+            android:id="@+id/edtUserName"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/tvPopupUserName"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="20dp"
+            android:hint="username"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/relativeParent2"
+        app:layout_constraintTop_toBottomOf="@+id/relativeParent1"
+        app:layout_constraintStart_toStartOf="@+id/relativeParent1"
+        app:layout_constraintEnd_toEndOf="@+id/relativeParent1"
+        android:layout_marginTop="20dp">
+        <TextView
+            android:id="@+id/tvPopupBirthday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Birthday"
+            android:layout_centerVertical="true"
+            android:textSize="15dp"/>
+
+        <EditText
+            android:id="@+id/edtBirthday"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/tvPopupBirthday"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="20dp"
+            android:hint="MM/DD/YYYY"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/relativeParent3"
+        app:layout_constraintTop_toBottomOf="@+id/relativeParent2"
+        app:layout_constraintStart_toStartOf="@+id/relativeParent2"
+        app:layout_constraintEnd_toEndOf="@+id/relativeParent2"
+        android:layout_marginTop="20dp">
+        <TextView
+            android:id="@+id/tvPopupRegion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Region"
+            android:layout_centerVertical="true"
+            android:textSize="15dp"/>
+
+        <EditText
+            android:id="@+id/edtRegion"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/tvPopupRegion"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="20dp"
+            android:hint="Country/Region"/>
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/btnSubmit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Submit"
+        android:backgroundTint="@color/orange"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/relativeParent3" />
+
+    <Button
+        android:id="@+id/btnCancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Cancel"
+        android:backgroundTint="@color/orange"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnSubmit" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

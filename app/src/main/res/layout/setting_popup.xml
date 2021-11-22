@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/relativePopup1"
+        android:background="@color/orange">
+        <ImageView
+            android:id="@+id/imgModify"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_setting" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Change Settings"
+            android:id="@+id/tv_Change"
+            android:layout_toRightOf="@+id/imgModify"
+            android:layout_marginLeft="5dp"/>
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/relativePopup2"
+        android:layout_below="@+id/relativePopup1">
+        <ImageView
+            android:id="@+id/imgReward"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_reward" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Reward"
+            android:id="@+id/tv_Reward"
+            android:layout_toRightOf="@+id/imgReward"
+            android:layout_marginLeft="5dp"/>
+
+    </RelativeLayout>
+
+
+</RelativeLayout>
