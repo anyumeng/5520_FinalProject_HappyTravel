@@ -1,4 +1,4 @@
-package edu.northeastern.cs5520.yumengan.numadfa21_happytravel;
+package edu.northeastern.cs5520.numadfa21_happytravel;
 
 import android.content.Context;
 
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
     public void useAppContext() {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        assertEquals("edu.northeastern.cs5520.yumengan.numadfa21_happytravel", appContext.getPackageName());
+        assertEquals("edu.northeastern.cs5520.numadfa21_happytravel", appContext.getPackageName());
     }
 }

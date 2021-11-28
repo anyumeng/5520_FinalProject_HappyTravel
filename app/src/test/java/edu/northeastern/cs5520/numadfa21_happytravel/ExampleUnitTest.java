@@ -1,4 +1,4 @@
-package edu.northeastern.cs5520.yumengan.numadfa21_happytravel;
+package edu.northeastern.cs5520.numadfa21_happytravel;
 
 import org.junit.Test;
 

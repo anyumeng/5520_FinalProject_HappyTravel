@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="edu.northeastern.cs5520.yumengan.numadfa21_happytravel">
+    package="edu.northeastern.cs5520.numadfa21_happytravel">
 
     <application
         android:allowBackup="true"
@@ -20,4 +20,7 @@
         </activity>
     </application>
 
+    <meta-data
+        android:name="com.google.android.geo.API_KEY"
+        android:value="${MAPS_API_KEY}" />
 </manifest>

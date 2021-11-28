@@ -3,13 +3,16 @@ plugins {
 
     // Spotless to format code easily
     id "com.diffplug.spotless"
+
+    // Google map dependency
+    id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
 }
 
 android {
     compileSdk 31
 
     defaultConfig {
-        applicationId "edu.northeastern.cs5520.yumengan.numadfa21_happytravel"
+        applicationId "edu.northeastern.cs5520.numadfa21_happytravel"
         minSdk 26
         targetSdk 31
         versionCode 1
