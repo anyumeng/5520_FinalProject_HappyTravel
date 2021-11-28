@@ -25,9 +25,10 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PointOfInterest;
 import com.google.android.material.textfield.TextInputLayout;
 
-public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class MainActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnPoiClickListener {
     private static final String TAG = "main_search";
 
     private FusedLocationProviderClient fusedLocationClient;
@@ -97,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                                             CameraUpdateFactory.newCameraPosition(
                                                     CameraPosition.builder()
                                                             .target(latlng)
-                                                            .zoom(20)
+                                                            .zoom(15)
                                                             .build()));
                                     googleMap.addMarker(
                                             new MarkerOptions()
@@ -146,5 +147,12 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         this.googleMap = googleMap;
+        //this.googleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+        this.googleMap.setOnPoiClickListener(this);
+    }
+
+    @Override
+    public void onPoiClick(@NonNull PointOfInterest pointOfInterest) {
+        Toast.makeText(this, pointOfInterest.name, Toast.LENGTH_LONG).show();
     }
 }
