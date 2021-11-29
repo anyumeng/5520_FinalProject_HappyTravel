@@ -6,27 +6,34 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/search_input_layout"
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/autocomplete_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:endIconDrawable="@drawable/ic_baseline_search_24"
-        app:endIconMode="custom"
+        app:layout_constraintBottom_toTopOf="@+id/main_map"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <com.google.android.material.textfield.TextInputEditText
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="50dp">
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/autocomplete_fragment"
+            android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/rounded_edittext"
-            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/main_map"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-    </com.google.android.material.textfield.TextInputLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/main_menu_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:contentDescription="@string/actions"
         android:onClick="showPopup"
         android:src="@drawable/ic_baseline_add_36"
         app:backgroundTint="#EF9A9A"
@@ -35,18 +42,21 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.8"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/search_input_layout"
+        app:layout_constraintTop_toBottomOf="@id/autocomplete_card"
         app:layout_constraintVertical_bias="0.8"
         app:rippleColor="#FFE082"
-        app:tint="@null"
-        android:contentDescription="@string/actions" />
+        app:tint="@null" />
 
     <androidx.fragment.app.FragmentContainerView xmlns:map="http://schemas.android.com/apk/res-auto"
         android:id="@+id/main_map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:background="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/autocomplete_card"
         map:mapId="@string/map_id" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -15,6 +15,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
@@ -26,13 +27,17 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PointOfInterest;
-import com.google.android.material.textfield.TextInputLayout;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
+import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
+import java.util.Arrays;
 
-public class MainActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnPoiClickListener {
+public class MainActivity extends AppCompatActivity
+        implements OnMapReadyCallback, GoogleMap.OnPoiClickListener {
     private static final String TAG = "main_search";
 
     private FusedLocationProviderClient fusedLocationClient;
-    private TextInputLayout textInputLayout;
     private GoogleMap googleMap;
 
     @Override
@@ -40,16 +45,41 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        this.textInputLayout = findViewById(R.id.search_input_layout);
-        this.textInputLayout.bringToFront();
-        this.setupSearchBar();
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        tryUpdateLocation();
 
         SupportMapFragment mapFragment =
                 (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.main_map);
         mapFragment.getMapAsync(this);
 
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-        tryUpdateLocation();
+        this.setupAutoComplete();
+    }
+
+    private void setupAutoComplete() {
+        // Setup auto completion view.
+        // Initialize the AutocompleteSupportFragment.
+        Places.initialize(getApplicationContext(), "AIzaSyCy17aCHfCwb7B_Tka2hwS5SoHomaUzKM8");
+
+        AutocompleteSupportFragment autocompleteFragment =
+                (AutocompleteSupportFragment)
+                        getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment);
+
+        // Specify the types of place data to return.
+        autocompleteFragment.setPlaceFields(
+                Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG));
+
+        // Set up a PlaceSelectionListener to handle the response.
+        autocompleteFragment.setOnPlaceSelectedListener(
+                new PlaceSelectionListener() {
+                    @Override
+                    public void onPlaceSelected(@NonNull Place place) {
+                        Log.i(TAG, "Place: " + place.getName() + ", " + place.getId());
+                        gotoLocation(place.getLatLng());
+                    }
+
+                    @Override
+                    public void onError(@NonNull Status status) {}
+                });
     }
 
     /**
@@ -87,26 +117,12 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     .addOnSuccessListener(
                             this,
                             location -> {
-                                // Got last known location. In some rare
-                                // situations this
-                                // can be null.
-                                // TextView explain = findViewById(R.id.explain);
-                                LatLng latlng =
-                                        new LatLng(location.getLatitude(), location.getLongitude());
                                 if (location != null) {
-                                    googleMap.animateCamera(
-                                            CameraUpdateFactory.newCameraPosition(
-                                                    CameraPosition.builder()
-                                                            .target(latlng)
-                                                            .zoom(15)
-                                                            .build()));
-                                    googleMap.addMarker(
-                                            new MarkerOptions()
-                                                    .position(
-                                                            new LatLng(
-                                                                    location.getLatitude(),
-                                                                    location.getLongitude()))
-                                                    .title("Marker"));
+                                    LatLng latlng =
+                                            new LatLng(
+                                                    location.getLatitude(),
+                                                    location.getLongitude());
+                                    gotoLocation(latlng);
                                     Log.v(TAG, location.toString());
                                     // explain.setText(R.string.location_updated);
                                 } else {
@@ -119,12 +135,20 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         return false;
     }
 
-    private void setupSearchBar() {
-        this.textInputLayout.setEndIconOnClickListener(
-                view -> {
-                    // Log.v(TAG, "search bar!");
-                    Toast.makeText(this, "Searched!", Toast.LENGTH_LONG).show();
-                });
+    /**
+     * Move the current map to the given location, also created a marker on the location.
+     *
+     * @param latLng the location to move to.
+     */
+    private void gotoLocation(LatLng latLng) {
+        googleMap.clear();
+        googleMap.animateCamera(
+                CameraUpdateFactory.newCameraPosition(
+                        CameraPosition.builder().target(latLng).zoom(15).build()));
+        googleMap.addMarker(
+                new MarkerOptions()
+                        .position(new LatLng(latLng.latitude, latLng.longitude))
+                        .title("Marker"));
     }
 
     public void showPopup(View view) {
@@ -147,12 +171,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         this.googleMap = googleMap;
-        //this.googleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
         this.googleMap.setOnPoiClickListener(this);
     }
 
     @Override
     public void onPoiClick(@NonNull PointOfInterest pointOfInterest) {
-        Toast.makeText(this, pointOfInterest.name, Toast.LENGTH_LONG).show();
+        gotoLocation(pointOfInterest.latLng);
     }
 }
