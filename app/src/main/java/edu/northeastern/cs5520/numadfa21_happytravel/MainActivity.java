@@ -6,15 +6,18 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.Toast;
+
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationRequest;
@@ -31,6 +34,7 @@ import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
+
 import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity
@@ -39,6 +43,7 @@ public class MainActivity extends AppCompatActivity
 
     private FusedLocationProviderClient fusedLocationClient;
     private GoogleMap googleMap;
+    private AutocompleteSupportFragment autocompleteFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +65,7 @@ public class MainActivity extends AppCompatActivity
         // Initialize the AutocompleteSupportFragment.
         Places.initialize(getApplicationContext(), "AIzaSyCy17aCHfCwb7B_Tka2hwS5SoHomaUzKM8");
 
-        AutocompleteSupportFragment autocompleteFragment =
+        this.autocompleteFragment =
                 (AutocompleteSupportFragment)
                         getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment);
 
@@ -78,7 +83,8 @@ public class MainActivity extends AppCompatActivity
                     }
 
                     @Override
-                    public void onError(@NonNull Status status) {}
+                    public void onError(@NonNull Status status) {
+                    }
                 });
     }
 
@@ -177,5 +183,8 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onPoiClick(@NonNull PointOfInterest pointOfInterest) {
         gotoLocation(pointOfInterest.latLng);
+        EditText editText = this.autocompleteFragment.getView()
+                                                     .findViewById(R.id.places_autocomplete_search_input);
+        editText.setText(pointOfInterest.name);
     }
 }
