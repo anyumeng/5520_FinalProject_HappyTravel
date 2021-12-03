@@ -11,13 +11,11 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.Toast;
-
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
-
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationRequest;
@@ -34,7 +32,7 @@ import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
-
+import edu.northeastern.cs5520.numadfa21_happytravel.persistence.CheckDao;
 import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity
@@ -56,6 +54,10 @@ public class MainActivity extends AppCompatActivity
         SupportMapFragment mapFragment =
                 (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.main_map);
         mapFragment.getMapAsync(this);
+
+        // The following 2 lines are for simple read/write test, feel free to remove them.
+        CheckDao.simpleWrite();
+        CheckDao.simpleRead();
 
         this.setupAutoComplete();
     }
@@ -83,8 +85,7 @@ public class MainActivity extends AppCompatActivity
                     }
 
                     @Override
-                    public void onError(@NonNull Status status) {
-                    }
+                    public void onError(@NonNull Status status) {}
                 });
     }
 
@@ -183,8 +184,10 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onPoiClick(@NonNull PointOfInterest pointOfInterest) {
         gotoLocation(pointOfInterest.latLng);
-        EditText editText = this.autocompleteFragment.getView()
-                                                     .findViewById(R.id.places_autocomplete_search_input);
+        EditText editText =
+                this.autocompleteFragment
+                        .getView()
+                        .findViewById(R.id.places_autocomplete_search_input);
         editText.setText(pointOfInterest.name);
     }
 }

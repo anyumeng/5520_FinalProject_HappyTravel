@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "900066446915",
+    "firebase_url": "https://happytravel-886e4-default-rtdb.firebaseio.com",
+    "project_id": "happytravel-886e4",
+    "storage_bucket": "happytravel-886e4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:900066446915:android:cc86e2e464b3d72dd28ef6",
+        "android_client_info": {
+          "package_name": "edu.northeastern.cs5520.numadfa21_happytravel"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "900066446915-0jihivvvknpvlfmbersnfb2299r00rce.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "edu.northeastern.cs5520.numadfa21_happytravel",
+            "certificate_hash": "2a03c86554d3a8121182889876cc182e0f57e63f"
+          }
+        },
+        {
+          "client_id": "900066446915-f37btho57t91krdkv3ju7biqk5614kk8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAgK8lzXzMARt1CLfiCUm3PzMS4Lr70RO4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "900066446915-f37btho57t91krdkv3ju7biqk5614kk8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
