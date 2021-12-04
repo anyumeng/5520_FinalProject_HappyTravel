@@ -5,7 +5,9 @@ import android.graphics.Path;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.RatingBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,6 +34,7 @@ public class CheckInActivity extends AppCompatActivity {
     private Optional<Place> uploadPlace = Optional.empty();
     private String userId;
     private TextView reviewTextView;
+    private Spinner spinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +61,15 @@ public class CheckInActivity extends AppCompatActivity {
 
         this.ratingBar = findViewById(R.id.check_in_rating);
         this.reviewTextView = findViewById(R.id.check_in_review);
+
+        this.spinner = (Spinner) findViewById(R.id.check_in_type_spinner);
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.check_in_spinner_array, android.R.layout.simple_spinner_item);
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        spinner.setAdapter(adapter);
     }
 
     /**
@@ -79,6 +91,7 @@ public class CheckInActivity extends AppCompatActivity {
         db.child("place_id").setValue(this.uploadPlace.get().getId());
         db.child("review_content").setValue(this.reviewTextView.getText().toString());
         db.child("review_stars").setValue(String.valueOf(this.ratingBar.getRating()));
+        db.child("type").setValue(this.spinner.getSelectedItem().toString());
 
         Toast.makeText(this, "Check in successfully!", Toast.LENGTH_SHORT).show();
     }

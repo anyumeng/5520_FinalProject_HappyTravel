@@ -7,36 +7,33 @@
     tools:context=".CheckInActivity">
 
     <TextView
+        android:id="@+id/check_in_place_tag"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/check_in_place_tag"
+        android:text="@string/place"
         app:layout_constraintBottom_toTopOf="@id/check_in_rating_tag"
         app:layout_constraintEnd_toStartOf="@id/check_in_place_name"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:text="@string/place">
-    </TextView>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
+        android:id="@+id/check_in_place_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/check_in_place_name"
         app:layout_constraintBottom_toTopOf="@id/check_in_rating_tag"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/check_in_place_tag"
-        app:layout_constraintTop_toTopOf="parent">
-    </TextView>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
+        android:id="@+id/check_in_rating_tag"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/check_in_rating_tag"
+        android:text="@string/ratings"
         app:layout_constraintBottom_toBottomOf="@+id/check_in_review"
         app:layout_constraintEnd_toStartOf="@id/check_in_rating"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/check_in_place_tag"
-        android:text="@string/ratings">
-    </TextView>
+        app:layout_constraintTop_toBottomOf="@id/check_in_place_tag" />
 
     <RatingBar
         android:id="@+id/check_in_rating"
@@ -47,8 +44,17 @@
         android:numStars="5"
         android:stepSize="0.5"
         app:layout_constraintBottom_toTopOf="@+id/check_in_review"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/check_in_type_spinner"
         app:layout_constraintStart_toEndOf="@id/check_in_rating_tag"
+        app:layout_constraintTop_toBottomOf="@id/check_in_place_tag" />
+
+    <Spinner
+        android:id="@+id/check_in_type_spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/check_in_review"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/check_in_rating"
         app:layout_constraintTop_toBottomOf="@id/check_in_place_tag" />
 
     <EditText
@@ -58,7 +64,8 @@
         app:layout_constraintBottom_toTopOf="@id/check_in_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/check_in_rating_tag"/>
+        app:layout_constraintTop_toBottomOf="@id/check_in_rating_tag" />
+
 
     <Button
         android:id="@id/check_in_button"
@@ -69,7 +76,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/check_in_review"/>
+        app:layout_constraintTop_toBottomOf="@id/check_in_review" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
