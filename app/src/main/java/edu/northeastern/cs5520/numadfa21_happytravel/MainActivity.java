@@ -7,9 +7,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.PopupWindow;
 import android.widget.Toast;
 import androidx.activity.result.ActivityResultLauncher;
@@ -87,6 +89,13 @@ public class MainActivity extends AppCompatActivity
         // Google Sign in
         createSigninRequest();
 
+        Button openFriend = findViewById(R.id.btnCallFriend);
+        openFriend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openFriendActivity();
+            }
+        });
     }
 
     // =========Start of Friend Activity===========
@@ -304,7 +313,6 @@ public class MainActivity extends AppCompatActivity
 
         popupWindow.showAsDropDown(
                 popupButton, 0, -popupButton.getHeight() - showView.getMeasuredHeight());
-
 
     }
 

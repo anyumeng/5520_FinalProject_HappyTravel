@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -59,6 +60,11 @@ public class FriendAdpater extends RecyclerView.Adapter<FriendAdpater.FriendView
             super(itemView);
 
             image = itemView.findViewById(R.id.imageViewPlaceImage);
+            int width = 300;
+            int height = 300;
+            LinearLayout.LayoutParams parms = new LinearLayout.LayoutParams(width,height);
+            image.setLayoutParams(parms);
+
             name = itemView.findViewById(R.id.textViewName);
             place = itemView.findViewById(R.id.textViewPlace);
             review_content = itemView.findViewById(R.id.textViewReviewContent);
