@@ -36,8 +36,6 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="25dp"
                 android:text="@string/friend_name"
-                android:textSize="16sp"
-                android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@+id/imageViewPlaceImage"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -48,8 +46,6 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="25dp"
                 android:text="@string/place"
-                android:textSize="16sp"
-                android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@+id/textViewName"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -59,20 +55,21 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:text="@string/review_content"
-                android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="@+id/textViewName"
                 app:layout_constraintTop_toBottomOf="@+id/textViewName" />
 
             <RatingBar
                 android:id="@+id/ratingBarReviewStar"
                 style="?android:attr/ratingBarStyleSmall"
-                android:layout_width="96dp"
-                android:layout_height="32dp"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="30dp"
-                android:layout_marginEnd="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="25dp"
+                android:layout_marginEnd="20dp"
+                android:isIndicator="true"
                 android:numStars="5"
                 android:stepSize="0.5"
+                app:layout_constraintBottom_toBottomOf="@+id/textViewPlace"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/textViewPlace"
                 app:layout_constraintTop_toTopOf="parent" />

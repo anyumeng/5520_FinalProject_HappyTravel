@@ -44,8 +44,7 @@ public class FriendAdpater extends RecyclerView.Adapter<FriendAdpater.FriendView
         holder.place.setText(places[position]);
         holder.review_content.setText(review_contents[position]);
         //review star
-
-
+        holder.review_star.setRating(review_stars[position]);
     }
 
     @Override
@@ -71,6 +70,7 @@ public class FriendAdpater extends RecyclerView.Adapter<FriendAdpater.FriendView
             place = itemView.findViewById(R.id.textViewPlace);
             review_content = itemView.findViewById(R.id.textViewReviewContent);
             review_star = itemView.findViewById(R.id.ratingBarReviewStar);
+            review_star.setRating(5);
         }
     }
 }
