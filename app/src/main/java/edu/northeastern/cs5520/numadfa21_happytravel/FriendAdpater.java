@@ -8,7 +8,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -20,7 +19,13 @@ public class FriendAdpater extends RecyclerView.Adapter<FriendAdpater.FriendView
     private int[] review_stars;
     private String[] review_contents;
 
-    public FriendAdpater(Context ct, int[] images, String[] names, String[] places, int[] review_stars, String[] review_contents) {
+    public FriendAdpater(
+            Context ct,
+            int[] images,
+            String[] names,
+            String[] places,
+            int[] review_stars,
+            String[] review_contents) {
         this.context = ct;
         this.images = images;
         this.names = names;
@@ -43,7 +48,7 @@ public class FriendAdpater extends RecyclerView.Adapter<FriendAdpater.FriendView
         holder.name.setText(names[position]);
         holder.place.setText(places[position]);
         holder.review_content.setText(review_contents[position]);
-        //review star
+        // review star
         holder.review_star.setRating(review_stars[position]);
     }
 
@@ -63,7 +68,7 @@ public class FriendAdpater extends RecyclerView.Adapter<FriendAdpater.FriendView
             image = itemView.findViewById(R.id.imageViewPlaceImage);
             int width = 300;
             int height = 300;
-            LinearLayout.LayoutParams parms = new LinearLayout.LayoutParams(width,height);
+            LinearLayout.LayoutParams parms = new LinearLayout.LayoutParams(width, height);
             image.setLayoutParams(parms);
 
             name = itemView.findViewById(R.id.textViewName);

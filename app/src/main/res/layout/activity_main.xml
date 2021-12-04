@@ -28,7 +28,6 @@
     </com.google.android.material.card.MaterialCardView>
 
 
-
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/main_menu_button"
         android:layout_width="wrap_content"
@@ -43,7 +42,24 @@
         app:layout_constraintHorizontal_bias="0.8"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/autocomplete_card"
-        app:layout_constraintVertical_bias="0.8"
+        app:layout_constraintVertical_bias="0.7"
+        app:rippleColor="#FFE082"
+        app:tint="@null" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/check_in_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/actions"
+        android:onClick="checkIn"
+        android:src="@drawable/ic_baseline_checkin_36"
+        app:backgroundTint="#EF9A9A"
+        app:fabSize="auto"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.8"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/main_menu_button"
         app:rippleColor="#FFE082"
         app:tint="@null" />
 

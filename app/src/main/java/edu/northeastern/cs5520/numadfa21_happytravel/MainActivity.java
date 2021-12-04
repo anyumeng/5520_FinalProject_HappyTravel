@@ -11,7 +11,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.PopupMenu;
 import android.widget.PopupWindow;
 import android.widget.Toast;
 import androidx.activity.result.ActivityResultLauncher;
@@ -19,7 +18,6 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
-
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -49,9 +47,9 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
-
 import edu.northeastern.cs5520.numadfa21_happytravel.persistence.CheckDao;
 import java.util.Arrays;
+import java.util.Optional;
 
 public class MainActivity extends AppCompatActivity
         implements OnMapReadyCallback, GoogleMap.OnPoiClickListener {
@@ -60,13 +58,13 @@ public class MainActivity extends AppCompatActivity
     private FusedLocationProviderClient fusedLocationClient;
     private GoogleMap googleMap;
     private AutocompleteSupportFragment autocompleteFragment;
+    private Optional<String> selectedPlaceId = Optional.empty();
 
     // Google Sign in
     private GoogleSignInClient mGoogleSignInClient;
-    private final static int RC_SIGN_IN = 123;
+    private static final int RC_SIGN_IN = 123;
     private static final String TAG2 = "GOOGLE SIGN IN";
     private FirebaseAuth mAuth;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,12 +88,13 @@ public class MainActivity extends AppCompatActivity
         createSigninRequest();
 
         Button openFriend = findViewById(R.id.btnCallFriend);
-        openFriend.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openFriendActivity();
-            }
-        });
+        openFriend.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        openFriendActivity();
+                    }
+                });
     }
 
     // =========Start of Friend Activity===========
@@ -107,16 +106,18 @@ public class MainActivity extends AppCompatActivity
 
     // =========End of Friend Activity==========
 
-
     // ===========Start of Google Sign in Part================
 
     private void createSigninRequest() {
         // Configure sign-in to request the user's ID, email address, and basic
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken("900066446915-f37btho57t91krdkv3ju7biqk5614kk8.apps.googleusercontent.com")
-                .requestEmail()
-                .build();
+        GoogleSignInOptions gso =
+                new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                        .requestIdToken(
+                                "900066446915-f37btho57t91krdkv3ju7biqk5614kk8.apps"
+                                        + ".googleusercontent.com")
+                        .requestEmail()
+                        .build();
 
         // Build a GoogleSignInClient with the options specified by gso.
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
@@ -130,13 +131,13 @@ public class MainActivity extends AppCompatActivity
         // Set the dimensions of the sign-in button.
         SignInButton signInButton = findViewById(R.id.sign_in_button);
         signInButton.setSize(SignInButton.SIZE_STANDARD);
-        signInButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                signIn();
-            }
-        });
-
+        signInButton.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        signIn();
+                    }
+                });
     }
 
     private void signIn() {
@@ -166,20 +167,26 @@ public class MainActivity extends AppCompatActivity
     private void firebaseAuthWithGoogle(String idToken) {
         AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
         mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG2, "signInWithCredential:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w(TAG2, "signInWithCredential:failure", task.getException());
-                        }
-                        reload();
-                    }
-                });
+                .addOnCompleteListener(
+                        this,
+                        new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if (task.isSuccessful()) {
+                                    // Sign in success, update UI with the signed-in user's
+                                    // information
+                                    Log.d(TAG2, "signInWithCredential:success");
+                                    FirebaseUser user = mAuth.getCurrentUser();
+                                } else {
+                                    // If sign in fails, display a message to the user.
+                                    Log.w(
+                                            TAG2,
+                                            "signInWithCredential:failure",
+                                            task.getException());
+                                }
+                                reload();
+                            }
+                        });
     }
 
     @Override
@@ -187,7 +194,7 @@ public class MainActivity extends AppCompatActivity
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        if(currentUser != null) {
+        if (currentUser != null) {
             reload();
         }
     }
@@ -213,14 +220,15 @@ public class MainActivity extends AppCompatActivity
 
         // Specify the types of place data to return.
         autocompleteFragment.setPlaceFields(
-                Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG));
+                Arrays.asList(
+                        Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG, Place.Field.TYPES));
 
         // Set up a PlaceSelectionListener to handle the response.
         autocompleteFragment.setOnPlaceSelectedListener(
                 new PlaceSelectionListener() {
                     @Override
                     public void onPlaceSelected(@NonNull Place place) {
-                        Log.i(TAG, "Place: " + place.getName() + ", " + place.getId());
+                        selectedPlaceId = Optional.of(place.getId());
                         gotoLocation(place.getLatLng());
                     }
 
@@ -298,6 +306,11 @@ public class MainActivity extends AppCompatActivity
                         .title("Marker"));
     }
 
+    /**
+     * Show pop up menu for the plus button
+     *
+     * @param view the current view.
+     */
     public void showPopup(View view) {
         View showView = LayoutInflater.from(this).inflate(R.layout.main_popup, null);
         ImageButton popupButton = findViewById(R.id.main_menu_button);
@@ -313,7 +326,28 @@ public class MainActivity extends AppCompatActivity
 
         popupWindow.showAsDropDown(
                 popupButton, 0, -popupButton.getHeight() - showView.getMeasuredHeight());
+    }
 
+    /**
+     * Go to check-in activity.
+     *
+     * @param view the current view.
+     */
+    public void checkIn(View view) {
+        if (!this.selectedPlaceId.isPresent()) {
+            Toast.makeText(
+                            this,
+                            String.format("You must select a place before check-in!"),
+                            Toast.LENGTH_LONG)
+                    .show();
+            return;
+        }
+        String userId = this.mAuth.getUid();
+        String checkInPlace = this.selectedPlaceId.get();
+        Intent intent = new Intent(this, CheckInActivity.class);
+        intent.putExtra("userId", userId);
+        intent.putExtra("checkInPlace", checkInPlace);
+        startActivity(intent);
     }
 
     @Override
@@ -324,6 +358,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onPoiClick(@NonNull PointOfInterest pointOfInterest) {
+        this.selectedPlaceId = Optional.of(pointOfInterest.placeId);
         gotoLocation(pointOfInterest.latLng);
         EditText editText =
                 this.autocompleteFragment
