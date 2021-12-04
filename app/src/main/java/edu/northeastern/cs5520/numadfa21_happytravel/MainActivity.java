@@ -65,6 +65,7 @@ public class MainActivity extends AppCompatActivity
     private static final String TAG2 = "GOOGLE SIGN IN";
     private FirebaseAuth mAuth;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,7 +86,18 @@ public class MainActivity extends AppCompatActivity
 
         // Google Sign in
         createSigninRequest();
+
     }
+
+    // =========Start of Friend Activity===========
+
+    private void openFriendActivity() {
+        Intent intent = new Intent(this, FriendsActivity.class);
+        startActivity(intent);
+    }
+
+    // =========End of Friend Activity==========
+
 
     // ===========Start of Google Sign in Part================
 
@@ -292,6 +304,8 @@ public class MainActivity extends AppCompatActivity
 
         popupWindow.showAsDropDown(
                 popupButton, 0, -popupButton.getHeight() - showView.getMeasuredHeight());
+
+
     }
 
     @Override
