@@ -5,4 +5,7 @@
     <string name="homepage">Homepage</string>
     <string name="map_id">d9c4a78f9b5c21b2</string>
     <string name="actions">Actions For Main</string>
+    <string name="friend_name">Friend Name</string>
+    <string name="place">Place</string>
+    <string name="review_content">Review Content</string>
 </resources>
