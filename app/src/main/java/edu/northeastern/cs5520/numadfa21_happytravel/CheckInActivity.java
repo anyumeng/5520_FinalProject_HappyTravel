@@ -2,6 +2,7 @@ package edu.northeastern.cs5520.numadfa21_happytravel;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.libraries.places.api.Places;
@@ -14,7 +15,8 @@ import edu.northeastern.cs5520.numadfa21_happytravel.place.PlaceUtils;
  */
 public class CheckInActivity extends AppCompatActivity {
 
-    PlacesClient client;
+    private PlacesClient client;
+    private RatingBar ratingBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,5 +37,7 @@ public class CheckInActivity extends AppCompatActivity {
                             TextView placeNameView = findViewById(R.id.check_in_place_name);
                             placeNameView.setText(place.getName());
                         });
+
+        this.ratingBar = findViewById(R.id.ratingBarReviewStar);
     }
 }
