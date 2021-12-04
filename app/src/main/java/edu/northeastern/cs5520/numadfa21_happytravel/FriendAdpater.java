@@ -44,6 +44,8 @@ public class FriendAdpater extends RecyclerView.Adapter<FriendAdpater.FriendView
         holder.place.setText(places[position]);
         holder.review_content.setText(review_contents[position]);
         //review star
+
+
     }
 
     @Override
