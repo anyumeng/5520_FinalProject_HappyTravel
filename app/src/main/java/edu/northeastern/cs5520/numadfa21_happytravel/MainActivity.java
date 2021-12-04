@@ -86,20 +86,11 @@ public class MainActivity extends AppCompatActivity
 
         // Google Sign in
         createSigninRequest();
-
-        Button openFriend = findViewById(R.id.btnCallFriend);
-        openFriend.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        openFriendActivity();
-                    }
-                });
     }
 
     // =========Start of Friend Activity===========
 
-    private void openFriendActivity() {
+    public void openFriendActivity(View view) {
         Intent intent = new Intent(this, FriendsActivity.class);
         startActivity(intent);
     }
