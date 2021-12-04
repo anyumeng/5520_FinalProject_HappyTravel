@@ -1,4 +1,4 @@
-package edu.northeastern.cs5520.yumengan.numadfa21_happytravel;
+package edu.northeastern.cs5520.numadfa21_happytravel;
 
 import android.content.Context;
 import android.provider.ContactsContract;
@@ -10,6 +10,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.w3c.dom.Text;
+
+import edu.northeastern.cs5520.yumengan.numadfa21_happytravel.R;
 
 public class HomePagePostHolder extends RecyclerView.ViewHolder {
     public Context context;

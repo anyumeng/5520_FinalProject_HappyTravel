@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".UserHomePage">
+    tools:context="edu.northeastern.cs5520.numadfa21_happytravel.UserHomePage">
 
     <ImageView
         android:id="@+id/imgBg"

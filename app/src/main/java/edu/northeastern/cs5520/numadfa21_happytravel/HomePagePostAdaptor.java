@@ -1,7 +1,6 @@
-package edu.northeastern.cs5520.yumengan.numadfa21_happytravel;
+package edu.northeastern.cs5520.numadfa21_happytravel;
 
 import android.content.Context;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +9,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+
+import edu.northeastern.cs5520.yumengan.numadfa21_happytravel.R;
 
 public class HomePagePostAdaptor extends RecyclerView.Adapter<HomePagePostHolder> {
     private Context context;
