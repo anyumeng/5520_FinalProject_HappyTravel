@@ -21,7 +21,7 @@ import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputLayout;
 
-import edu.northeastern.cs5520.yumengan.numadfa21_happytravel.R;
+import edu.northeastern.cs5520.numadfa21_happytravel.R;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "main_search";

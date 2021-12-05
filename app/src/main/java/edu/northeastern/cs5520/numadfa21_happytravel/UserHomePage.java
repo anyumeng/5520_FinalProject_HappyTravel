@@ -49,7 +49,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 
-import edu.northeastern.cs5520.yumengan.numadfa21_happytravel.R;
+import edu.northeastern.cs5520.numadfa21_happytravel.R;
 
 public class UserHomePage extends AppCompatActivity {
     public String TAG = "UserHomePage";
@@ -57,7 +57,7 @@ public class UserHomePage extends AppCompatActivity {
     public String ITEM_NUM = "ITEM_NUM", KEY = "POST";
     private StorageReference reference = FirebaseStorage.getInstance().getReference();
     public int REQUEST_CODE;
-    private ImageView cover, profile, ic_menu, popupProfile;
+    private ImageView cover, profile, ic_menu, popupProfile, ic_plus;
     private FloatingActionButton fabCover, fabProfile;
     private String cameraPermission[];
     private String storagePermission[];
@@ -68,7 +68,7 @@ public class UserHomePage extends AppCompatActivity {
     private Button btnSubmit, btnCancel;
     private RecyclerView recyclerView;
     private HomePagePostAdaptor adaptor;
-    private ArrayList<Post> postList = new ArrayList<>();
+    private static ArrayList<Post> postList = new ArrayList<>();
     private String currentUserName;
     private static UserInfo currentUser = null;
     private static HashSet<String> nameSet = null;
@@ -85,10 +85,14 @@ public class UserHomePage extends AppCompatActivity {
         profile = findViewById(R.id.imgProfile);
         fabProfile = findViewById(R.id.fabProfile);
         ic_menu = findViewById(R.id.ic_menu);
+        ic_plus = findViewById(R.id.ic_plus);
         tvUserName = findViewById(R.id.tv_userName);
         cameraPermission = new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
         storagePermission = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE};
-
+//        if (postList == null || postList.size() == 0) {
+//            postList = new ArrayList<>();
+//            searchHistory(TravelHistory.class.getSimpleName(), "review_time", "2021-11-29T09:29:47.362Z");
+//        }
         this.currentUserName = "cst";
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -103,7 +107,7 @@ public class UserHomePage extends AppCompatActivity {
         }
         if (nameSet == null) {
             nameSet = new HashSet<>();
-            searchFromFirebase(UserInfo.class.getSimpleName());
+            searchUserName(UserInfo.class.getSimpleName());
         }
 
         init(savedInstanceState);
@@ -145,6 +149,13 @@ public class UserHomePage extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 showPopupMenu(view);
+            }
+        });
+
+        ic_plus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
             }
         });
     }
@@ -241,8 +252,10 @@ public class UserHomePage extends AppCompatActivity {
         int size = postList == null?0:postList.size();
         outState.putInt(ITEM_NUM, size);
         for (int i = 0; i < size; i++) {
-            outState.putString(KEY + i + "name", postList.get(i).getContext());
             outState.putString(KEY + i + "url", postList.get(i).getImageUrl());
+            outState.putString(KEY + i + "place", postList.get(i).getPlace());
+            outState.putString(KEY + i + "time", postList.get(i).getTime());
+            outState.putString(KEY + i + "rateBar", postList.get(i).getStar());
         }
         super.onSaveInstanceState(outState);
     }
@@ -303,7 +316,7 @@ public class UserHomePage extends AppCompatActivity {
         edtRegion = settingPopup.findViewById(R.id.edtRegion);
         btnSubmit = settingPopup.findViewById(R.id.btnSubmit);
         btnCancel = settingPopup.findViewById(R.id.btnCancel);
-        popupProfile = settingPopup.findViewById(R.id.imgPopupProfile);
+        popupProfile = settingPopup.findViewById(R.id.imgProfileAdd);
         edtUserName.setText(currentUser.getUserName());
         edtBirthday.setText(currentUser.getBirthday());
         edtRegion.setText(currentUser.getRegion());
@@ -372,7 +385,47 @@ public class UserHomePage extends AppCompatActivity {
                     }
                 });
     }
-    private void searchFromFirebase(String dbName) {
+
+    private void searchHistory(String dbName, String refKey, String refValue) {
+//        Post post = new Post("", UserHomePage.this, "gogong", "2020", "5");
+//        postList.add(post);
+
+
+        DatabaseReference rootUser = FirebaseDatabase.getInstance().getReference(dbName);
+        rootUser.orderByChild(refKey)
+                .equalTo(refValue)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        for (DataSnapshot childSnapshot: dataSnapshot.getChildren()) {
+                            TravelHistory history = childSnapshot.getValue(TravelHistory.class);
+                            Post post = new Post(history.getReview_photo_path(), UserHomePage.this, history.getPlace_id(), history.getReview_time(), history.getReview_stars());
+                            postList.add(post);
+                            /*
+                            Object obj = childSnapshot.getValue();
+                            try{
+                                HashMap<String, Object> userData = (HashMap<String, Object>) obj;
+//                                Post post = new Post((String) userData.get("review_photo_path"), UserHomePage.this, (String) userData.get("place_id"), (String) userData.get("review_time"), (String) userData.get("review_stars"));
+                                Post post = new Post("", UserHomePage.this, "gogong", "2020", "5");
+                                postList.add(post);
+                            }catch (ClassCastException cce){
+                                Toast.makeText(UserHomePage.this, "error", Toast.LENGTH_SHORT).show();
+                            }
+                             */
+
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
+
+
+    }
+    private void searchUserName(String dbName) {
         DatabaseReference rootUser = FirebaseDatabase.getInstance().getReference(dbName);
         Toast.makeText(UserHomePage.this, "Start reading", Toast.LENGTH_SHORT).show();
 
@@ -465,9 +518,11 @@ public class UserHomePage extends AppCompatActivity {
             if (postList == null || postList.size() == 0) {
                 int size = savedInstanceState.getInt(ITEM_NUM);
                 for (int i = 0; i < size; i++) {
-                    String name = savedInstanceState.getString(KEY + i + "name");
                     String url = savedInstanceState.getString(KEY + i + "url");
-                    postList.add(new Post(name, url));
+                    String place = savedInstanceState.getString(KEY + i + "place");
+                    String time = savedInstanceState.getString(KEY + i + "time");
+                    String rateBar = savedInstanceState.getString(KEY + i + "rateBar");
+                    postList.add(new Post(url, UserHomePage.this, place, time, rateBar));
                 }
             }
         }
@@ -475,7 +530,7 @@ public class UserHomePage extends AppCompatActivity {
     public void createRecyclerView() {
         recyclerView = findViewById(R.id.rvPost);
         recyclerView.setHasFixedSize(true);
-        adaptor = new HomePagePostAdaptor(UserHomePage.this);
+        adaptor = new HomePagePostAdaptor(UserHomePage.this, reference);
         adaptor.setPostList(postList);
         adaptor.notifyDataSetChanged();
         recyclerView.setAdapter(adaptor);

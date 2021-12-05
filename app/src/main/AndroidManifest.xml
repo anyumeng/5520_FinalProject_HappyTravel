@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="edu.northeastern.cs5520.yumengan.numadfa21_happytravel">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="edu.northeastern.cs5520.numadfa21_happytravel">
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -14,7 +15,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.NUMADFa21HappyTravel"
-        android:requestLegacyExternalStorage="true">
+        android:requestLegacyExternalStorage="true"
+        android:appComponentFactory="androidx"
+        tools:replace="android:appComponentFactory"
+        >
         <activity
             android:name="edu.northeastern.cs5520.numadfa21_happytravel.UserHomePage"
             android:exported="true" >

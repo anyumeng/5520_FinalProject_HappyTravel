@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/imgPopupProfile"
+        android:id="@+id/imgProfileAdd"
         android:layout_width="120dp"
         android:layout_height="120dp"
         android:src="@mipmap/defaultphoto"
@@ -21,9 +21,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/relativeParent1"
-        app:layout_constraintTop_toBottomOf="@+id/imgPopupProfile"
-        app:layout_constraintStart_toStartOf="@+id/imgPopupProfile"
-        app:layout_constraintEnd_toEndOf="@+id/imgPopupProfile"
+        app:layout_constraintTop_toBottomOf="@+id/imgProfileAdd"
+        app:layout_constraintStart_toStartOf="@+id/imgProfileAdd"
+        app:layout_constraintEnd_toEndOf="@+id/imgProfileAdd"
         android:layout_marginTop="20dp">
 
         <TextView
