@@ -25,6 +25,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.PopupWindow;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -57,27 +58,31 @@ public class UserHomePage extends AppCompatActivity {
     public String ITEM_NUM = "ITEM_NUM", KEY = "POST";
     private StorageReference reference = FirebaseStorage.getInstance().getReference();
     public int REQUEST_CODE;
-    private ImageView cover, profile, ic_menu, popupProfile, ic_plus;
+    private ImageView cover, profile, ic_menu, popupProfile, ic_plus, addFriendProfile, postImg;
     private FloatingActionButton fabCover, fabProfile;
     private String cameraPermission[];
     private String storagePermission[];
     private AlertDialog.Builder dialogBuilder;
     private AlertDialog dialog;
-    private EditText edtUserName, edtBirthday, edtRegion;
-    private TextView tvUserName;
-    private Button btnSubmit, btnCancel;
+    private EditText edtUserName, edtBirthday, edtRegion, edtFriend;
+    private TextView tvUserName, tvError, tvFollowedError, tvPostPlace, tvPostContent, tvPostTime;
+    private Button btnSubmit, btnCancel, btnFollow, btnFollowCancel, btnDelete, btnBack;
+    private RatingBar ratingBarPost;
     private RecyclerView recyclerView;
     private HomePagePostAdaptor adaptor;
     private static ArrayList<Post> postList = new ArrayList<>();
+    private static ArrayList<TravelHistory> historyList = new ArrayList<>();
     private String currentUserName;
     private static UserInfo currentUser = null;
     private static HashSet<String> nameSet = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_home_page);
 //        DatabaseReference rootUser = FirebaseDatabase.getInstance().getReference(UserInfo.class.getSimpleName());
-//        UserInfo user = new UserInfo("cst", "China", "", "");
+//        ArrayList<String> temp = new ArrayList<>();
+//        UserInfo user = new UserInfo("dtt", "China", "", "", "", temp);
 //        rootUser.push().setValue(user);
 
         cover = findViewById(R.id.imgBg);
@@ -89,9 +94,14 @@ public class UserHomePage extends AppCompatActivity {
         tvUserName = findViewById(R.id.tv_userName);
         cameraPermission = new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
         storagePermission = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE};
+//        init(savedInstanceState);
 //        if (postList == null || postList.size() == 0) {
-//            postList = new ArrayList<>();
-//            searchHistory(TravelHistory.class.getSimpleName(), "review_time", "2021-11-29T09:29:47.362Z");
+//        postList = new ArrayList<>();
+        searchHistory(TravelHistory.class.getSimpleName(), "review_time", "2021-11-29T08:51:30.927Z");
+
+//        }
+//        else{
+//            createRecyclerView();
 //        }
         this.currentUserName = "cst";
         Bundle extras = getIntent().getExtras();
@@ -110,7 +120,7 @@ public class UserHomePage extends AppCompatActivity {
             searchUserName(UserInfo.class.getSimpleName());
         }
 
-        init(savedInstanceState);
+
 //        postList.add(0, new Post("", "Hello"));
 //        addItem(0,  new Post("", "World"));
         fabCover.setOnClickListener(new View.OnClickListener() {
@@ -148,13 +158,14 @@ public class UserHomePage extends AppCompatActivity {
         ic_menu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showPopupMenu(view);
+                showEditPopup(view);
             }
         });
 
         ic_plus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                createAddFriendDialog();
 
             }
         });
@@ -266,7 +277,7 @@ public class UserHomePage extends AppCompatActivity {
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), REQUEST_CODE);
     }
 
-    public void showPopupMenu(View view) {
+    public void showEditPopup(View view) {
         PopupMenu popupMenu = new PopupMenu(view.getContext(), view);
         popupMenu.inflate(R.menu.popup_setting);
 
@@ -276,7 +287,7 @@ public class UserHomePage extends AppCompatActivity {
                 switch (menuItem.getItemId()) {
                     case R.id.popup_setting_edit: {
                         Log.d(TAG, "here");
-                        createDialog();
+                        createSettingDialog();
                         break;
                     }
                     case R.id.popup_setting_reward:{
@@ -291,6 +302,69 @@ public class UserHomePage extends AppCompatActivity {
         popupMenu.show();
 
     }
+
+    public void createAddFriendDialog() {
+        dialogBuilder = new AlertDialog.Builder(UserHomePage.this);
+        View settingPopup = getLayoutInflater().inflate(R.layout.addfriend_popup, null);
+        edtFriend = settingPopup.findViewById(R.id.edtFriend);
+        btnFollow = settingPopup.findViewById(R.id.btnSubmitAddFriend);
+        btnFollowCancel = settingPopup.findViewById(R.id.btnCancelAddFriend);
+        addFriendProfile = settingPopup.findViewById(R.id.imgProfileAdd);
+        tvError = settingPopup.findViewById(R.id.tvError);
+        tvFollowedError = settingPopup.findViewById(R.id.tvFollowedError);
+        if (currentUser.getProfileUrl() != null && currentUser.getProfileUrl().length() > 0) {
+            Glide.with(UserHomePage.this).load(currentUser.getProfileUrl()).into(addFriendProfile);
+        }
+
+        dialogBuilder.setView(settingPopup);
+        dialog = dialogBuilder.create();
+        dialog.show();
+
+        btnFollowCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                tvError.setVisibility(View.INVISIBLE);
+                tvFollowedError.setVisibility(View.INVISIBLE);
+                dialog.dismiss();
+            }
+        });
+
+        btnFollow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String friend = edtFriend.getText().toString();
+                if (nameSet.contains(friend)) {
+                    tvError.setVisibility(View.INVISIBLE);
+                    tvFollowedError.setVisibility(View.INVISIBLE);
+                    ArrayList<String> temp = currentUser.getFriends();
+                    boolean isExist = false;
+                    for (int i = 0; i < temp.size(); i++) {
+                        if (temp.get(i).equals(friend)) {
+                            isExist = true;
+                            break;
+                        }
+                    }
+                    if (isExist) {
+                        tvFollowedError.setVisibility(View.VISIBLE);
+                    }
+                    else {
+                        temp.add(friend);
+                        currentUser.setFriends(temp);
+                        DatabaseReference rootUser = FirebaseDatabase.getInstance().getReference(UserInfo.class.getSimpleName());
+                        String userKey = currentUser.getKey();
+                        rootUser.child(userKey).setValue(currentUser);
+                        Toast.makeText(UserHomePage.this, "Update Successfully", Toast.LENGTH_SHORT).show();
+                        dialog.dismiss();
+                    }
+                }
+                else {
+                    tvError.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+    }
+
 
     public void showPopupWindow(View view) {
         LayoutInflater inflater = (LayoutInflater)
@@ -308,7 +382,7 @@ public class UserHomePage extends AppCompatActivity {
         popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
     }
 
-    public void createDialog() {
+    public void createSettingDialog() {
         dialogBuilder = new AlertDialog.Builder(UserHomePage.this);
         View settingPopup = getLayoutInflater().inflate(R.layout.homepage_popup, null);
         edtUserName = settingPopup.findViewById(R.id.edtUserName);
@@ -387,9 +461,6 @@ public class UserHomePage extends AppCompatActivity {
     }
 
     private void searchHistory(String dbName, String refKey, String refValue) {
-//        Post post = new Post("", UserHomePage.this, "gogong", "2020", "5");
-//        postList.add(post);
-
 
         DatabaseReference rootUser = FirebaseDatabase.getInstance().getReference(dbName);
         rootUser.orderByChild(refKey)
@@ -398,9 +469,14 @@ public class UserHomePage extends AppCompatActivity {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         for (DataSnapshot childSnapshot: dataSnapshot.getChildren()) {
+//                            UserInfo user = childSnapshot.getValue(UserInfo.class);
                             TravelHistory history = childSnapshot.getValue(TravelHistory.class);
+                            history.setKey(childSnapshot.getKey());
+                            historyList.add(history);
                             Post post = new Post(history.getReview_photo_path(), UserHomePage.this, history.getPlace_id(), history.getReview_time(), history.getReview_stars());
                             postList.add(post);
+//                            Post post = new Post("", UserHomePage.this, user.getUserName(), user.getBirthday(), "5.0");
+//                            postList.add(post);
                             /*
                             Object obj = childSnapshot.getValue();
                             try{
@@ -414,6 +490,8 @@ public class UserHomePage extends AppCompatActivity {
                              */
 
                         }
+                        createRecyclerView();
+
                     }
 
                     @Override
@@ -510,7 +588,7 @@ public class UserHomePage extends AppCompatActivity {
     }
     public void init(Bundle savedInstanceState) {
         initialItem(savedInstanceState);
-        createRecyclerView();
+//        createRecyclerView();
     }
 
     public void initialItem(Bundle savedInstanceState) {
@@ -532,6 +610,7 @@ public class UserHomePage extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         adaptor = new HomePagePostAdaptor(UserHomePage.this, reference);
         adaptor.setPostList(postList);
+        adaptor.setHistoryList(historyList);
         adaptor.notifyDataSetChanged();
         recyclerView.setAdapter(adaptor);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));

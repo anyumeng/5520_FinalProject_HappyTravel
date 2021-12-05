@@ -29,21 +29,41 @@
         >
 
         <TextView
-            android:id="@+id/tvFriend"
+            android:id="@+id/tvReviewPlace"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:text="UserId/UserName"
             android:textSize="15dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvError"
+            android:textColor="@color/red"
+            android:text="User doesn't exist"
+            android:layout_below="@+id/tvReviewPlace"
+            android:layout_marginTop="30dp"
+            android:layout_centerHorizontal="true"
+            android:visibility="invisible"/>
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvFollowedError"
+            android:textColor="@color/red"
+            android:text="You have already followed"
+            android:layout_below="@+id/tvReviewPlace"
+            android:layout_marginTop="30dp"
+            android:layout_centerHorizontal="true"
+            android:visibility="invisible"/>
         <EditText
-            android:id="@+id/edtUserName"
+            android:id="@+id/edtFriend"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/tvFriend"
             android:layout_centerVertical="true"
             android:layout_marginLeft="20dp"
-            android:hint="username"/>
+            android:layout_toRightOf="@+id/tvReviewPlace"
+            android:hint="username" />
     </RelativeLayout>
 
 
@@ -51,8 +71,8 @@
         android:id="@+id/btnSubmitAddFriend"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="Submit"
+        android:layout_marginTop="10dp"
+        android:text="Follow"
         android:backgroundTint="@color/orange"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -62,7 +82,7 @@
         android:id="@+id/btnCancelAddFriend"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:text="Cancel"
         android:backgroundTint="@color/orange"
         app:layout_constraintEnd_toEndOf="parent"

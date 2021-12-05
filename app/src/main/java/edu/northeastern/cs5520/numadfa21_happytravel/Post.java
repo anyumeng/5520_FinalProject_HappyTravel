@@ -2,13 +2,15 @@ package edu.northeastern.cs5520.numadfa21_happytravel;
 
 import android.content.Context;
 
+import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
+
 public class Post {
     private String imageUrl;
     private Context context;
     private String place;
     private String time;
     private String star;
-
     public Post() {
 
     }

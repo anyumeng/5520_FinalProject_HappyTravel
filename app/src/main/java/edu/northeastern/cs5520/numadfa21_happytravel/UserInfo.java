@@ -2,6 +2,10 @@ package edu.northeastern.cs5520.numadfa21_happytravel;
 
 import com.google.firebase.database.Exclude;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+
 public class UserInfo {
     @Exclude
     private String key;
@@ -10,15 +14,17 @@ public class UserInfo {
     private String birthday;
     private String imageUrl;
     private String profileUrl;
+    private ArrayList<String> friends = new ArrayList<>();
     public UserInfo() {
     }
 
-    public UserInfo(String userName, String region, String birthday, String imageUrl, String profileUrl) {
+    public UserInfo(String userName, String region, String birthday, String imageUrl, String profileUrl, ArrayList<String> friends) {
         this.userName = userName;
         this.region = region;
         this.birthday = birthday;
         this.imageUrl = imageUrl;
         this.profileUrl = profileUrl;
+        this.friends = friends;
     }
 
     public String getUserName() {
@@ -67,5 +73,13 @@ public class UserInfo {
 
     public void setProfileUrl(String profileUrl) {
         this.profileUrl = profileUrl;
+    }
+
+    public ArrayList<String> getFriends() {
+        return friends;
+    }
+
+    public void setFriends(ArrayList<String> friends) {
+        this.friends = friends;
     }
 }
