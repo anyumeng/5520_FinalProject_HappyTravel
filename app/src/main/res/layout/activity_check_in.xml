@@ -67,7 +67,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/check_in_rating_tag"
-        android:src="@drawable/ic_baseline_add_36" />
+        android:src="@drawable/ic_baseline_image_search_36" />
 
     <EditText
         android:id="@+id/check_in_review"
