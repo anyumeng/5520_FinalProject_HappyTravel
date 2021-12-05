@@ -59,8 +59,10 @@
 
     <ImageButton
         android:id="@+id/check_in_photo"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:scaleType="centerInside"
+        app:layout_constraintHeight_max="150dp"
         app:layout_constraintBottom_toTopOf="@id/check_in_review"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

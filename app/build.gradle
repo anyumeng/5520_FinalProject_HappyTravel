@@ -57,10 +57,10 @@ dependencies {
 
     // Also declare the dependency for the Google Play services library and specify its version
     implementation 'com.google.android.gms:play-services-auth:19.2.0'
-    // Import the BoM for the Firebase platform
-    implementation platform('com.google.firebase:firebase-bom:29.0.1')
+    // Authentication for firebase
     implementation 'com.google.firebase:firebase-auth:21.0.1'
-
+    // Firebase storage
+    implementation 'com.google.firebase:firebase-storage'
 }
 
 spotless {
