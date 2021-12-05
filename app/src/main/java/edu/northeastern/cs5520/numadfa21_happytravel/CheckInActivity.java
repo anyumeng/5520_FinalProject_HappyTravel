@@ -2,15 +2,21 @@ package edu.northeastern.cs5520.numadfa21_happytravel;
 
 import android.content.Intent;
 import android.graphics.Path;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.RatingBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.libraries.places.api.Places;
@@ -35,6 +41,8 @@ public class CheckInActivity extends AppCompatActivity {
     private String userId;
     private TextView reviewTextView;
     private Spinner spinner;
+    private ImageButton image;
+    private ActivityResultLauncher<String> mGetContent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +78,26 @@ public class CheckInActivity extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
+
+        // Image Button for upload image.
+        this.image = findViewById(R.id.check_in_photo);
+        this.mGetContent = registerForActivityResult(new ActivityResultContracts.GetContent(),
+                uri -> {
+                    if (uri != null) {
+                        Log.v(TAG, uri.toString());
+                        this.image.setImageURI(uri);
+                    }
+                });
+        this.image.setOnClickListener(this::choosePhoto);
+    }
+
+    /**
+     * On click operation to let use choose photo.
+     *
+     * @param view the view of the button.
+     */
+    private void choosePhoto(View view) {
+        mGetContent.launch("image/*");
     }
 
     /**
