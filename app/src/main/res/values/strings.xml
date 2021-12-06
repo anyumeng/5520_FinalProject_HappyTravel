@@ -3,4 +3,13 @@
     <string name="recommendation">Recommendation</string>
     <string name="friends">Friends</string>
     <string name="homepage">Homepage</string>
+    <string name="map_id">d9c4a78f9b5c21b2</string>
+    <string name="actions">Actions For Main</string>
+    <string name="friend_name">Friend Name</string>
+    <string name="place">Place</string>
+    <string name="review_content">Review Content</string>
+    <string name="ratings">Your Rating</string>
+    <string name="check_in">Check In!!!!</string>
+    <string name="reward_name">Reward Name</string>
+    <string name="progress">Progress</string>
 </resources>

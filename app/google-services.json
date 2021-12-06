@@ -15,11 +15,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "900066446915-0ilnjth6e0fkek5dfgcgn5jbo1p0rb11.apps.googleusercontent.com",
+          "client_id": "900066446915-0jihivvvknpvlfmbersnfb2299r00rce.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "edu.northeastern.cs5520.numadfa21_happytravel",
-            "certificate_hash": "93030177a37a99d03d7e878afbb4311ec5f6022f"
+            "certificate_hash": "2a03c86554d3a8121182889876cc182e0f57e63f"
           }
         },
         {

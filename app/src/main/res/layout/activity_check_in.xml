@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".CheckInActivity">
+
+    <TextView
+        android:id="@+id/check_in_place_tag"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/place"
+        app:layout_constraintBottom_toTopOf="@id/check_in_rating_tag"
+        app:layout_constraintEnd_toStartOf="@id/check_in_place_name"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/check_in_place_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@id/check_in_rating_tag"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/check_in_place_tag"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/check_in_rating_tag"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/ratings"
+        app:layout_constraintBottom_toBottomOf="@+id/check_in_photo"
+        app:layout_constraintEnd_toStartOf="@id/check_in_rating"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/check_in_place_tag" />
+
+    <RatingBar
+        android:id="@+id/check_in_rating"
+        style="?android:attr/ratingBarStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:isIndicator="false"
+        android:numStars="5"
+        android:stepSize="0.5"
+        app:layout_constraintBottom_toTopOf="@+id/check_in_photo"
+        app:layout_constraintEnd_toStartOf="@id/check_in_type_spinner"
+        app:layout_constraintStart_toEndOf="@id/check_in_rating_tag"
+        app:layout_constraintTop_toBottomOf="@id/check_in_place_tag" />
+
+    <Spinner
+        android:id="@+id/check_in_type_spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/check_in_photo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/check_in_rating"
+        app:layout_constraintTop_toBottomOf="@id/check_in_place_tag" />
+
+    <ImageButton
+        android:id="@+id/check_in_photo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scaleType="centerInside"
+        app:layout_constraintHeight_max="150dp"
+        app:layout_constraintBottom_toTopOf="@id/check_in_review"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/check_in_rating_tag"
+        android:src="@drawable/ic_baseline_image_search_36" />
+
+    <EditText
+        android:id="@+id/check_in_review"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@id/check_in_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/check_in_rating_tag" />
+
+
+    <Button
+        android:id="@id/check_in_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="uploadCheckIn"
+        android:text="@string/check_in"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/check_in_review" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

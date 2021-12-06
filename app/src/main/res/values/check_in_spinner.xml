@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="check_in_spinner_array">
+        <item>Eat and Drink</item>
+        <item>Humanities and Arts</item>
+        <item>Nature</item>
+        <item>Sports</item>
+        <item>Other</item>
+    </string-array>
+</resources>
