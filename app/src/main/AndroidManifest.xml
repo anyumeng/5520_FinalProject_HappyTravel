@@ -24,8 +24,6 @@
         >
         <activity
             android:name="edu.northeastern.cs5520.numadfa21_happytravel.UserHomePage"
-            android:exported="true" >
-            android:name=".RewardActivity"
             android:exported="true" />
         <activity
             android:name=".CheckInActivity"
@@ -49,15 +47,6 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity
-            android:name="edu.northeastern.cs5520.numadfa21_happytravel.MainActivity"
-            android:exported="true">
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
-
-<!--                <category android:name="android.intent.category.LAUNCHER" />-->
-<!--            </intent-filter>-->
         </activity>
     </application>
 
