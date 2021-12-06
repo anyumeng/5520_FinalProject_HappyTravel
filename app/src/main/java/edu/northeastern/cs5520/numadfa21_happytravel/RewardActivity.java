@@ -31,8 +31,8 @@ public class RewardActivity extends AppCompatActivity {
     private RewardAdapter adapter;
 
     private DatabaseReference root = FirebaseDatabase.getInstance().getReference();
-    private DatabaseReference rewardRef = root.child("RewardImage");
-    private DatabaseReference userRef = root.child("User");
+    private DatabaseReference rewardRef = root.child("Reward");
+    private DatabaseReference userRef = root.child("UserInfo");
     private List<Map<String, String>> list = new ArrayList<>();
 
     @Override
