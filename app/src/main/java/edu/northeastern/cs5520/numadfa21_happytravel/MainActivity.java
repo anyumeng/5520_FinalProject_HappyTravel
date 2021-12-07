@@ -58,11 +58,6 @@ public class MainActivity extends AppCompatActivity
     private GoogleMap googleMap;
     private AutocompleteSupportFragment autocompleteFragment;
     private Optional<String> selectedPlaceId = Optional.empty();
-
-    // Google Sign in
-    private GoogleSignInClient mGoogleSignInClient;
-    private static final int RC_SIGN_IN = 123;
-    private static final String TAG2 = "GOOGLE SIGN IN";
     private FirebaseAuth mAuth;
 
     @Override
@@ -77,14 +72,9 @@ public class MainActivity extends AppCompatActivity
                 (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.main_map);
         mapFragment.getMapAsync(this);
 
-        // The following 2 lines are for simple read/write test, feel free to remove them.
-        CheckDao.simpleWrite();
-        CheckDao.simpleRead();
+        mAuth = FirebaseAuth.getInstance();
 
         this.setupAutoComplete();
-
-        // Google Sign in
-        createSigninRequest();
     }
 
     // =========Start of Friend Activity===========
@@ -95,108 +85,6 @@ public class MainActivity extends AppCompatActivity
     }
 
     // =========End of Friend Activity==========
-
-    // ===========Start of Google Sign in Part================
-
-    private void createSigninRequest() {
-        // Configure sign-in to request the user's ID, email address, and basic
-        // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
-        GoogleSignInOptions gso =
-                new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                        .requestIdToken(
-                                "900066446915-f37btho57t91krdkv3ju7biqk5614kk8.apps"
-                                        + ".googleusercontent.com")
-                        .requestEmail()
-                        .build();
-
-        // Build a GoogleSignInClient with the options specified by gso.
-        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-
-        // Check for existing Google Sign In account, if the user is already signed in
-        // the GoogleSignInAccount will be non-null.
-        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
-        if (account != null) {
-            Log.v(TAG, String.format("account:%s", account.getEmail()));
-        }
-
-        mAuth = FirebaseAuth.getInstance();
-
-        // Set the dimensions of the sign-in button.
-        SignInButton signInButton = findViewById(R.id.sign_in_button);
-        signInButton.setSize(SignInButton.SIZE_STANDARD);
-        signInButton.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        signIn();
-                    }
-                });
-    }
-
-    private void signIn() {
-        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-        startActivityForResult(signInIntent, RC_SIGN_IN);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
-        if (requestCode == RC_SIGN_IN) {
-            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            try {
-                // Google Sign In was successful, authenticate with Firebase
-                GoogleSignInAccount account = task.getResult(ApiException.class);
-                Log.d(TAG2, "firebaseAuthWithGoogle:" + account.getId());
-                firebaseAuthWithGoogle(account.getIdToken());
-            } catch (ApiException e) {
-                // Google Sign In failed, update UI appropriately
-                Log.w(TAG2, "Google sign in failed", e);
-            }
-        }
-    }
-
-    private void firebaseAuthWithGoogle(String idToken) {
-        AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
-        mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(
-                        this,
-                        new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                if (task.isSuccessful()) {
-                                    // Sign in success, update UI with the signed-in user's
-                                    // information
-                                    Log.d(TAG2, "signInWithCredential:success");
-                                    FirebaseUser user = mAuth.getCurrentUser();
-                                    Log.d(TAG, user.getEmail());
-                                } else {
-                                    // If sign in fails, display a message to the user.
-                                    Log.w(
-                                            TAG2,
-                                            "signInWithCredential:failure",
-                                            task.getException());
-                                }
-                                // reload();
-                            }
-                        });
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-    }
-
-    private void reload() {
-        startActivity(new Intent(getApplicationContext(), GoogleSigninInfoActivity.class));
-    }
-
-    GoogleSignInClient getGoogleSignInClient() {
-        return mGoogleSignInClient;
-    }
 
     // ===============End of Google Sign in Part================
 
