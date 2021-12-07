@@ -17,12 +17,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.net.PlacesClient;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+
+import edu.northeastern.cs5520.numadfa21_happytravel.model.PlaceTypeMapping;
 import edu.northeastern.cs5520.numadfa21_happytravel.place.PlaceUtils;
 import java.time.Instant;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -167,6 +171,24 @@ public class CheckInActivity extends AppCompatActivity {
         db.child("type").setValue(this.spinner.getSelectedItem().toString());
         db.child("review_photo_path").setValue(this.photoPath.orElse(""));
         db.child("review_time").setValue(Instant.now().toString());
+
+        DatabaseReference userDb = FirebaseDatabase.getInstance().getReference("UserInfoTest").child(this.userId);
+        userDb.get().addOnCompleteListener(task -> {
+           User user = task.getResult().getValue(User.class);
+           Map<String, Integer> posts = user.getPost();
+           String type = PlaceTypeMapping.getIdByName(this.spinner.getSelectedItem().toString());
+           if(posts.containsKey(type)) {
+               posts.put(type, posts.get(type) + 1);
+           } else {
+               posts.put(type, 1);
+           }
+           if(posts.containsKey("post")) {
+               posts.put("post", posts.get("post") + 1);
+           } else {
+               posts.put("post", 1);
+           }
+           userDb.child("post").setValue(posts);
+        });
 
         Toast.makeText(this, "Check in successfully!", Toast.LENGTH_SHORT).show();
     }
