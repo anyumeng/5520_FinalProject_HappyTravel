@@ -1,53 +1,25 @@
 package edu.northeastern.cs5520.numadfa21_happytravel;
 
+import java.util.Map;
+
 public class User {
 
-    private String name;
-    private PostDTO post;
+    private String userName;
+    private Map<String, Integer> post;
 
-    public String getName() {
-        return name;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
-    public PostDTO getPost() {
+    public Map<String, Integer> getPost() {
         return post;
     }
 
-    public void setPost(PostDTO post) {
+    public void setPost(Map<String, Integer> post) {
         this.post = post;
-    }
-
-    public static class PostDTO {
-        private Integer eat;
-        private Integer play;
-        private Integer post;
-
-        public Integer getEat() {
-            return eat;
-        }
-
-        public void setEat(Integer eat) {
-            this.eat = eat;
-        }
-
-        public Integer getPlay() {
-            return play;
-        }
-
-        public void setPlay(Integer play) {
-            this.play = play;
-        }
-
-        public Integer getPost() {
-            return post;
-        }
-
-        public void setPost(Integer post) {
-            this.post = post;
-        }
     }
 }

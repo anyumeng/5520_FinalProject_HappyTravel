@@ -1,6 +1,7 @@
 package edu.northeastern.cs5520.numadfa21_happytravel;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,17 +12,16 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import java.util.List;
-import java.util.Map;
 
 public class RewardAdapter extends RecyclerView.Adapter<RewardAdapter.RewardViewHolder> {
 
-    private List<Map<String, String>> mapList;
+    private List<Reward> rewards;
     private Context context;
 
-    public RewardAdapter(Context context, List<Map<String, String>> mapList) {
+    public RewardAdapter(Context context, List<Reward> rewards) {
 
         this.context = context;
-        this.mapList = mapList;
+        this.rewards = rewards;
     }
 
     @NonNull
@@ -33,20 +33,22 @@ public class RewardAdapter extends RecyclerView.Adapter<RewardAdapter.RewardView
 
     @Override
     public void onBindViewHolder(@NonNull RewardViewHolder holder, int position) {
-        Map<String, String> map = mapList.get(position);
-        Glide.with(context).load(map.get("rewardImageUrl")).into(holder.imageView);
-        holder.nameTextview.setText(map.get("rewardName"));
-        String a = map.get("text");
-        String b = map.get("rewardRequirement");
-        holder.tvPercent.setText(a + "/" + b);
-        Double c = (Double.parseDouble(a) / Double.parseDouble(b)) * 100;
-        String d = c.toString().substring(0, 2);
-        holder.progressBar.setProgress(Integer.parseInt(d));
+        Reward reward = rewards.get(position);
+        Glide.with(context)
+                .load(reward.getRewardRequirement().getRewardImageUrl())
+                .into(holder.imageView);
+        holder.nameTextview.setText(reward.getRewardRequirement().getRewardName());
+        int currentCount = reward.getRewardCount();
+        int requirement = reward.getRewardRequirement().getRewardRequirement();
+        holder.tvPercent.setText(String.format("%d/%d", currentCount, requirement));
+        double percentage = currentCount * 100.0 / requirement;
+        Log.v("requirement", reward.getRewardRequirement().toString());
+        holder.progressBar.setProgress((int) percentage);
     }
 
     @Override
     public int getItemCount() {
-        return mapList.size();
+        return rewards.size();
     }
 
     public static class RewardViewHolder extends RecyclerView.ViewHolder {

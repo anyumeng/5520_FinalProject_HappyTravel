@@ -1,13 +1,11 @@
 package edu.northeastern.cs5520.numadfa21_happytravel;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -109,26 +107,26 @@ public class LoginActivity extends AppCompatActivity {
     private void firebaseAuthWithGoogle(String idToken) {
         AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
         mAuth.signInWithCredential(credential)
-             .addOnCompleteListener(
-                     this,
-                     new OnCompleteListener<AuthResult>() {
-                         @Override
-                         public void onComplete(@NonNull Task<AuthResult> task) {
-                             if (task.isSuccessful()) {
-                                 // Sign in success, update UI with the signed-in user's
-                                 // information
-                                 Log.d(TAG, "signInWithCredential:success");
-                                 goMain();
-                             } else {
-                                 // If sign in fails, display a message to the user.
-                                 Log.w(
-                                         TAG2,
-                                         "signInWithCredential:failure",
-                                         task.getException());
-                             }
-                             // reload();
-                         }
-                     });
+                .addOnCompleteListener(
+                        this,
+                        new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if (task.isSuccessful()) {
+                                    // Sign in success, update UI with the signed-in user's
+                                    // information
+                                    Log.d(TAG, "signInWithCredential:success");
+                                    goMain();
+                                } else {
+                                    // If sign in fails, display a message to the user.
+                                    Log.w(
+                                            TAG2,
+                                            "signInWithCredential:failure",
+                                            task.getException());
+                                }
+                                // reload();
+                            }
+                        });
     }
 
     @Override

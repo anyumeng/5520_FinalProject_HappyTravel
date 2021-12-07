@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="check_in_spinner_array">
+<!--        When add a new item here, also modify PlaceTypeMapping.java-->
         <item>Eat and Drink</item>
         <item>Humanities and Arts</item>
         <item>Nature</item>

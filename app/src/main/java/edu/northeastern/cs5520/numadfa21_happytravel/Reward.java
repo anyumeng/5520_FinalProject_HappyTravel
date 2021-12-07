@@ -2,31 +2,22 @@ package edu.northeastern.cs5520.numadfa21_happytravel;
 
 public class Reward {
 
-    private String rewardImageUrl;
-    private String rewardName;
-    private Integer rewardRequirement;
+    private int rewardCount;
+    private RewardRequirement rewardRequirement;
 
-    public String getRewardImageUrl() {
-        return rewardImageUrl;
+    public int getRewardCount() {
+        return this.rewardCount;
     }
 
-    public void setRewardImageUrl(String rewardImageUrl) {
-        this.rewardImageUrl = rewardImageUrl;
+    public void setRewardCount(int rewardCount) {
+        this.rewardCount = rewardCount;
     }
 
-    public String getRewardName() {
-        return rewardName;
-    }
-
-    public void setRewardName(String rewardName) {
-        this.rewardName = rewardName;
-    }
-
-    public Integer getRewardRequirement() {
+    public RewardRequirement getRewardRequirement() {
         return rewardRequirement;
     }
 
-    public void setRewardRequirement(Integer rewardRequirement) {
+    public void setRewardRequirement(RewardRequirement rewardRequirement) {
         this.rewardRequirement = rewardRequirement;
     }
 }
