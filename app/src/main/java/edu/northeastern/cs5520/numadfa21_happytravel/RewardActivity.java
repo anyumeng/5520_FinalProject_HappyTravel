@@ -1,18 +1,15 @@
 package edu.northeastern.cs5520.numadfa21_happytravel;
 
+import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.os.Bundle;
-
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -26,7 +23,6 @@ public class RewardActivity extends AppCompatActivity {
     private String play = "";
     private String total = "";
     private String currentName;
-
 
     private RewardAdapter adapter;
 
@@ -46,77 +42,83 @@ public class RewardActivity extends AppCompatActivity {
         listReward = new ArrayList<>();
         this.currentName = "sara";
 
-        rewardRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-
-                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    Reward reward = dataSnapshot.getValue(Reward.class);
-                    listReward.add(reward);
-                }
-
-                userRef.addValueEventListener(new ValueEventListener() {
+        rewardRef.addValueEventListener(
+                new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                            User user = dataSnapshot.getValue(User.class);
 
-                            if(user.getName().equals(currentName)){
-                                eat = user.getPost().getEat().toString();
-                                play = user.getPost().getPlay().toString();
-                                total = user.getPost().getPost().toString();
-                            }
+                        for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                            Reward reward = dataSnapshot.getValue(Reward.class);
+                            listReward.add(reward);
                         }
-                        try {
-                            Thread.sleep(1000);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        for (Reward reward : listReward) {
-                            if (reward.getRewardName().equals("eat")) {
-                                Map<String, String> map = new HashMap<>();
-                                map.put("text", eat);
-                                map.put("rewardImageUrl", reward.getRewardImageUrl());
-                                map.put("rewardName", reward.getRewardName());
-                                map.put("rewardRequirement", reward.getRewardRequirement().toString());
-                                list.add(map);
-                            }
-                            if (reward.getRewardName().equals("play")) {
-                                Map<String, String> map = new HashMap<>();
-                                map.put("text", play);
-                                map.put("rewardImageUrl", reward.getRewardImageUrl());
-                                map.put("rewardName", reward.getRewardName());
-                                map.put("rewardRequirement", reward.getRewardRequirement().toString());
-                                list.add(map);
-                            }
-                            if (reward.getRewardName().equals("total")) {
-                                Map<String, String> map = new HashMap<>();
-                                map.put("text", total);
-                                map.put("rewardImageUrl", reward.getRewardImageUrl());
-                                map.put("rewardName", reward.getRewardName());
-                                map.put("rewardRequirement", reward.getRewardRequirement().toString());
-                                list.add(map);
-                            }
-                        }
-                        adapter = new RewardAdapter(RewardActivity.this, list);
-                        recyclerView.setAdapter(adapter);
+
+                        userRef.addValueEventListener(
+                                new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                        for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                                            User user = dataSnapshot.getValue(User.class);
+
+                                            if (user.getName().equals(currentName)) {
+                                                eat = user.getPost().getEat().toString();
+                                                play = user.getPost().getPlay().toString();
+                                                total = user.getPost().getPost().toString();
+                                            }
+                                        }
+                                        try {
+                                            Thread.sleep(1000);
+                                        } catch (InterruptedException e) {
+                                            e.printStackTrace();
+                                        }
+                                        for (Reward reward : listReward) {
+                                            if (reward.getRewardName().equals("eat")) {
+                                                Map<String, String> map = new HashMap<>();
+                                                map.put("text", eat);
+                                                map.put(
+                                                        "rewardImageUrl",
+                                                        reward.getRewardImageUrl());
+                                                map.put("rewardName", reward.getRewardName());
+                                                map.put(
+                                                        "rewardRequirement",
+                                                        reward.getRewardRequirement().toString());
+                                                list.add(map);
+                                            }
+                                            if (reward.getRewardName().equals("play")) {
+                                                Map<String, String> map = new HashMap<>();
+                                                map.put("text", play);
+                                                map.put(
+                                                        "rewardImageUrl",
+                                                        reward.getRewardImageUrl());
+                                                map.put("rewardName", reward.getRewardName());
+                                                map.put(
+                                                        "rewardRequirement",
+                                                        reward.getRewardRequirement().toString());
+                                                list.add(map);
+                                            }
+                                            if (reward.getRewardName().equals("total")) {
+                                                Map<String, String> map = new HashMap<>();
+                                                map.put("text", total);
+                                                map.put(
+                                                        "rewardImageUrl",
+                                                        reward.getRewardImageUrl());
+                                                map.put("rewardName", reward.getRewardName());
+                                                map.put(
+                                                        "rewardRequirement",
+                                                        reward.getRewardRequirement().toString());
+                                                list.add(map);
+                                            }
+                                        }
+                                        adapter = new RewardAdapter(RewardActivity.this, list);
+                                        recyclerView.setAdapter(adapter);
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError error) {}
+                                });
                     }
 
                     @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
+                    public void onCancelled(@NonNull DatabaseError error) {}
                 });
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-
-
-
-
     }
 }

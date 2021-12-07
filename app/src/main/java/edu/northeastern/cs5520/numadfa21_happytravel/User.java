@@ -2,7 +2,6 @@ package edu.northeastern.cs5520.numadfa21_happytravel;
 
 public class User {
 
-
     private String name;
     private PostDTO post;
 

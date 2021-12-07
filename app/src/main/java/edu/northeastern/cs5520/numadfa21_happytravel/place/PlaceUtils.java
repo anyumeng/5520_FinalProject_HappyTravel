@@ -7,12 +7,11 @@ import com.google.android.libraries.places.api.net.FetchPlaceResponse;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import java.util.Arrays;
 
-/**
- * Utils for place API from google maps.
- */
+/** Utils for place API from google maps. */
 public class PlaceUtils {
     /**
      * Try get place given a place id.
+     *
      * @param placeId the place id to fetch
      * @param client the places client.
      * @return the task to find the place.

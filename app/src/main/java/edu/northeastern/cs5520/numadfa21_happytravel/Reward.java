@@ -2,7 +2,6 @@ package edu.northeastern.cs5520.numadfa21_happytravel;
 
 public class Reward {
 
-
     private String rewardImageUrl;
     private String rewardName;
     private Integer rewardRequirement;

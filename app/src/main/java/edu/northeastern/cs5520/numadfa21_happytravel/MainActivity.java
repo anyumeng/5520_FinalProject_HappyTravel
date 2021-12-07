@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -116,6 +115,9 @@ public class MainActivity extends AppCompatActivity
         // Check for existing Google Sign In account, if the user is already signed in
         // the GoogleSignInAccount will be non-null.
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+        if (account != null) {
+            Log.v(TAG, String.format("account:%s", account.getEmail()));
+        }
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -168,6 +170,7 @@ public class MainActivity extends AppCompatActivity
                                     // information
                                     Log.d(TAG2, "signInWithCredential:success");
                                     FirebaseUser user = mAuth.getCurrentUser();
+                                    Log.d(TAG, user.getEmail());
                                 } else {
                                     // If sign in fails, display a message to the user.
                                     Log.w(
@@ -175,7 +178,7 @@ public class MainActivity extends AppCompatActivity
                                             "signInWithCredential:failure",
                                             task.getException());
                                 }
-                                reload();
+                                // reload();
                             }
                         });
     }
@@ -185,9 +188,6 @@ public class MainActivity extends AppCompatActivity
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        if (currentUser != null) {
-            reload();
-        }
     }
 
     private void reload() {
@@ -333,10 +333,12 @@ public class MainActivity extends AppCompatActivity
                     .show();
             return;
         }
-        String userId = this.mAuth.getUid();
         String checkInPlace = this.selectedPlaceId.get();
         Intent intent = new Intent(this, CheckInActivity.class);
-        intent.putExtra("userId", userId);
+        FirebaseUser user = this.mAuth.getCurrentUser();
+        intent.putExtra("userId", user.getUid());
+        intent.putExtra("userEmail", user.getEmail());
+        intent.putExtra("userName", user.getDisplayName());
         intent.putExtra("checkInPlace", checkInPlace);
         startActivity(intent);
     }
