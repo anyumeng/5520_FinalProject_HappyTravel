@@ -305,6 +305,7 @@ public class MainActivity extends AppCompatActivity
     public void showPopup(View view) {
         View showView = LayoutInflater.from(this).inflate(R.layout.main_popup, null);
         ImageButton popupButton = findViewById(R.id.main_menu_button);
+
         PopupWindow popupWindow =
                 new PopupWindow(
                         showView,
