@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/popup_setting_edit"
+        android:icon="@drawable/ic_setting"
+        android:title="Change Setting" />
+    <item
+        android:id="@+id/popup_setting_reward"
+        android:icon="@drawable/ic_reward"
+        android:title="Reward" />
+</menu>

@@ -22,3 +22,4 @@ public class ExampleInstrumentedTest {
         assertEquals("edu.northeastern.cs5520.numadfa21_happytravel", appContext.getPackageName());
     }
 }
+
