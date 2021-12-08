@@ -2,6 +2,7 @@ package edu.northeastern.cs5520.numadfa21_happytravel;
 
 public class TravelHistory {
     private String place_id;
+    private String place_name;
     private String review_content;
     private String review_photo_path;
     private String review_stars;
@@ -16,8 +17,9 @@ public class TravelHistory {
 
     }
 
-    public TravelHistory(String place_id, String review_content, String review_photo_path, String review_stars, String review_time, String type, String user_id) {
+    public TravelHistory(String place_id, String place_name, String review_content, String review_photo_path, String review_stars, String review_time, String type, String user_id) {
         this.place_id = place_id;
+        this.place_name = place_name;
         this.review_content = review_content;
         this.review_photo_path = review_photo_path;
         this.review_stars = review_stars;
@@ -32,6 +34,14 @@ public class TravelHistory {
 
     public void setPlace_id(String place_id) {
         this.place_id = place_id;
+    }
+
+    public String getPlace_name() {
+        return place_name;
+    }
+
+    public void setPlace_name(String place_name) {
+        this.place_name = place_name;
     }
 
     public String getReview_content() {

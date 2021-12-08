@@ -1,7 +1,6 @@
 package edu.northeastern.cs5520.numadfa21_happytravel;
 
 import android.os.Bundle;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,14 +24,12 @@ public class RewardActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private Map<String, RewardRequirement> rewardRequirements;
-    private String currentName;
+    private String currentUserId;
 
     private RewardAdapter adapter;
 
     private DatabaseReference root = FirebaseDatabase.getInstance().getReference();
-    // UserInfoTest is a temp table for testing, if you want to use "UserInfo", make sure it has
-    // same format as "UserInfoTest".
-    private DatabaseReference userRef = root.child("UserInfoTest");
+    private DatabaseReference userRef = root.child("UserInfo");
     private DatabaseReference rewardRequirementRef = root.child("Reward");
     private List<Reward> rewards = new ArrayList<>();
 
@@ -40,7 +37,7 @@ public class RewardActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reward);
-        this.currentName = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
+        this.currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         recyclerView = findViewById(R.id.recyclerview);
         recyclerView.setHasFixedSize(true);
@@ -50,7 +47,7 @@ public class RewardActivity extends AppCompatActivity {
         // initialize based on current user's data.
         userRef.get().addOnCompleteListener(task -> {
             rewardRequirementRef.get().addOnCompleteListener(requirementTask -> {
-                updateAdapter(task.getResult(), requirementTask.getResult());
+                updateAdapter(task.getResult().child(currentUserId), requirementTask.getResult());
             });
         });
 
@@ -60,7 +57,7 @@ public class RewardActivity extends AppCompatActivity {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         userRef.get().addOnCompleteListener(task -> {
-                            updateAdapter(task.getResult(), snapshot);
+                            updateAdapter(task.getResult().child(currentUserId), snapshot);
                         });
                     }
 
@@ -77,7 +74,7 @@ public class RewardActivity extends AppCompatActivity {
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         rewardRequirementRef.get().addOnCompleteListener(task -> {
                             rewardRequirements = new HashMap<>();
-                            updateAdapter(snapshot, task.getResult());
+                            updateAdapter(snapshot.child(currentUserId), task.getResult());
                         });
                     }
 
@@ -94,21 +91,17 @@ public class RewardActivity extends AppCompatActivity {
             String placeTypeId = rewardSnapshot.getKey();
             rewardRequirements.put(placeTypeId, reward);
         }
-        for (DataSnapshot userSnapshot : usersSnapshot.getChildren()) {
-            User user = userSnapshot.getValue(User.class);
-            if (user.getUserName().equals(currentName)) {
-                Map<String, Integer> posts = user.getPost();
-                rewards = posts.entrySet().stream()
-                               .filter(e -> rewardRequirements.containsKey(e.getKey()))
-                               .map(e -> {
-                                   Reward reward = new Reward();
-                                   reward.setRewardCount(e.getValue());
-                                   reward.setRewardRequirement(rewardRequirements.get(e.getKey())
-                                                                                 .getCopy());
-                                   return reward;
-                               }).collect(Collectors.toList());
-            }
-        }
+        UserInfo user = usersSnapshot.getValue(UserInfo.class);
+        Map<String, Integer> posts = user.getPost();
+        rewards = posts.entrySet().stream()
+                       .filter(e -> rewardRequirements.containsKey(e.getKey()))
+                       .map(e -> {
+                           Reward reward = new Reward();
+                           reward.setRewardCount(e.getValue());
+                           reward.setRewardRequirement(rewardRequirements.get(e.getKey())
+                                                                         .getCopy());
+                           return reward;
+                       }).collect(Collectors.toList());
         adapter = new RewardAdapter(RewardActivity.this, rewards);
         recyclerView.setAdapter(adapter);
     }

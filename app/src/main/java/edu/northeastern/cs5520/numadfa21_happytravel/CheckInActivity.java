@@ -166,13 +166,14 @@ public class CheckInActivity extends AppCompatActivity {
         db.child("user_id").setValue(this.userId);
         db.child("user_email").setValue(this.userEmail);
         db.child("place_id").setValue(this.uploadPlace.get().getId());
+        db.child("place_name").setValue(this.uploadPlace.get().getName());
         db.child("review_content").setValue(this.reviewTextView.getText().toString());
         db.child("review_stars").setValue(String.valueOf(this.ratingBar.getRating()));
         db.child("type").setValue(this.spinner.getSelectedItem().toString());
         db.child("review_photo_path").setValue(this.photoPath.orElse(""));
         db.child("review_time").setValue(Instant.now().toString());
 
-        DatabaseReference userDb = FirebaseDatabase.getInstance().getReference("UserInfoTest").child(this.userId);
+        DatabaseReference userDb = FirebaseDatabase.getInstance().getReference("UserInfo").child(this.userId);
         userDb.get().addOnCompleteListener(task -> {
            User user = task.getResult().getValue(User.class);
            Map<String, Integer> posts = user.getPost();
