@@ -16,7 +16,7 @@ public class FriendAdpater extends RecyclerView.Adapter<FriendAdpater.FriendView
     private int[] images;
     private String[] names;
     private String[] places;
-    private int[] review_stars;
+    private float[] review_stars;
     private String[] review_contents;
 
     public FriendAdpater(
@@ -24,7 +24,7 @@ public class FriendAdpater extends RecyclerView.Adapter<FriendAdpater.FriendView
             int[] images,
             String[] names,
             String[] places,
-            int[] review_stars,
+            float[] review_stars,
             String[] review_contents) {
         this.context = ct;
         this.images = images;
