@@ -23,6 +23,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -40,7 +41,14 @@ public class FriendsActivity extends AppCompatActivity {
 //    private int[] review_stars = {2, 3};
 //    private String[] review_contents = {"Good", "Great!"};
 
-    private int[] images = {R.drawable.pic1, R.drawable.pic2,R.drawable.pic2,R.drawable.pic2,R.drawable.pic2,R.drawable.pic2};
+//    private List<String> images = new ArrayList<>();
+    private List<String> images = new ArrayList<>(Arrays.asList("reviews/b6f01554-97dc-4941-a2c7-1aaf62fc5847.jpg",
+        "reviews/b6f01554-97dc-4941-a2c7-1aaf62fc5847.jpg",
+        "reviews/b6f01554-97dc-4941-a2c7-1aaf62fc5847.jpg",
+        "reviews/b6f01554-97dc-4941-a2c7-1aaf62fc5847.jpg",
+        "reviews/b6f01554-97dc-4941-a2c7-1aaf62fc5847.jpg",
+        "reviews/b6f01554-97dc-4941-a2c7-1aaf62fc5847.jpg",
+        "reviews/b6f01554-97dc-4941-a2c7-1aaf62fc5847.jpg"));
     private List<String> names = new ArrayList<>();
     private List<String> places = new ArrayList<>();
     private List<Float> review_stars = new ArrayList<>();
@@ -70,6 +78,7 @@ public class FriendsActivity extends AppCompatActivity {
                     TravelHistory travelHistory = snapshot.getValue(TravelHistory.class);
 
                     if(travelHistory.getUser_name().equals(currentUserName)) {
+                        //images.add(travelHistory.getReview_photo_path());
                         names.add(travelHistory.getUser_name());
                         places.add(travelHistory.getPlace_id().substring(0,4));
                         review_stars.add(Float.parseFloat(travelHistory.getReview_stars()));
@@ -84,7 +93,7 @@ public class FriendsActivity extends AppCompatActivity {
 
                 recyclerView = findViewById(R.id.recyclerViewFriends);
                 FriendAdpater friendAdapter = new FriendAdpater(FriendsActivity.this,
-                        images,
+                        images.toArray(new String[images.size()]),
                         names.toArray(new String[names.size()]),
                         places.toArray(new String[places.size()]),
                         review_stars_array,
@@ -104,23 +113,11 @@ public class FriendsActivity extends AppCompatActivity {
 //            Places.initialize(getApplicationContext(), "AIzaSyDxBQXCrUd95_va2_cSBz-KeadVfoa1Vio");
 //        }
 //        PlacesClient client = Places.createClient(getApplicationContext());
-
-//        Task<FetchPlaceResponse> task = PlaceUtils.getPlace("ChIJuXC3n8JrkFQRAY3rETGzQgU", client);
-//        String placename = task.getResult().getPlace().getName();
-//        Log.v(TAG, task.getResult().getPlace().getName());
-
 //        PlaceUtils.getPlace("ChIJuXC3n8JrkFQRAY3rETGzQgU", client)
 //                .addOnCompleteListener(
 //                        task -> {
 //                            Log.v(TAG, task.getResult().getPlace().getName());
 //                        });
-
-
-//        recyclerView = findViewById(R.id.recyclerViewFriends);
-//        FriendAdpater friendAdapter =
-//                new FriendAdpater(FriendsActivity.this, images, names, places, review_stars, review_contents);
-//        recyclerView.setAdapter(friendAdapter);
-//        recyclerView.setLayoutManager(new LinearLayoutManager(FriendsActivity.this));
 
     }
 }
