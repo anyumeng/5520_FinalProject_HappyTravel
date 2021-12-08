@@ -24,9 +24,11 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 import edu.northeastern.cs5520.numadfa21_happytravel.place.PlaceUtils;
 
@@ -35,13 +37,7 @@ public class FriendsActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
 
-//    private int[] images = {R.drawable.pic1, R.drawable.pic2};
-//    private String[] names = {"Li Ming", "Zhao Qiang"};
-//    private String[] places = {"Mission Peak", "Tahoe Lake"};
-//    private int[] review_stars = {2, 3};
-//    private String[] review_contents = {"Good", "Great!"};
-
-//    private List<String> images = new ArrayList<>();
+    private Set<String> friendSet = new HashSet<>();
     private List<String> images = new ArrayList<>();
     private List<String> names = new ArrayList<>();
     private List<String> places = new ArrayList<>();
@@ -60,6 +56,42 @@ public class FriendsActivity extends AppCompatActivity {
 //            currentUserName = signInAccount.getDisplayName();
 //        }
         Log.v(TAG, currentUserName);
+        friendSet.add("ym an");
+
+        // get the friend user id list of the current user
+        // show the posts of the given user
+        DatabaseReference reference_user =
+                FirebaseDatabase.getInstance().getReference().child("UserInfo");
+
+        reference_user.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    UserInfo userInfo = snapshot.getValue(UserInfo.class);
+
+                    // find the current user
+                    if(userInfo.getUserName().equals(currentUserName)) {
+                        ArrayList<String> friendList = userInfo.getFriends();
+                        friendSet.addAll(friendList);
+                        break;
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+
+        // transfer place id to place name
+        // create the place client
+        if (!Places.isInitialized()) {
+            Places.initialize(getApplicationContext(), "AIzaSyDxBQXCrUd95_va2_cSBz-KeadVfoa1Vio");
+        }
+        PlacesClient client = Places.createClient(getApplicationContext());
+
 
         // show the posts of the given user
         DatabaseReference reference =
@@ -71,7 +103,8 @@ public class FriendsActivity extends AppCompatActivity {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     TravelHistory travelHistory = snapshot.getValue(TravelHistory.class);
 
-                    if(travelHistory.getUser_name().equals(currentUserName)) {
+                    // should change to friendSet.contains(travelHistory.getUser_name())
+                    if(friendSet.contains(travelHistory.getUser_name())) {
                         if(travelHistory.getReview_photo_path() == null) {
                             images.add("");
                         }else {
@@ -79,6 +112,12 @@ public class FriendsActivity extends AppCompatActivity {
                         }
 
                         names.add(travelHistory.getUser_name());
+
+//                        PlaceUtils.getPlace(travelHistory.getPlace_id(), client).addOnCompleteListener(
+//                                task -> {
+//                                    Log.v(TAG, task.getResult().getPlace().getName());
+//                        });
+
                         places.add(travelHistory.getPlace_id().substring(0,4));
                         review_stars.add(Float.parseFloat(travelHistory.getReview_stars()));
                         review_contents.add(travelHistory.getReview_content());
@@ -106,17 +145,6 @@ public class FriendsActivity extends AppCompatActivity {
 
             }
         });
-
-        // transfer place id to place name
-//        if (!Places.isInitialized()) {
-//            Places.initialize(getApplicationContext(), "AIzaSyDxBQXCrUd95_va2_cSBz-KeadVfoa1Vio");
-//        }
-//        PlacesClient client = Places.createClient(getApplicationContext());
-//        PlaceUtils.getPlace("ChIJuXC3n8JrkFQRAY3rETGzQgU", client)
-//                .addOnCompleteListener(
-//                        task -> {
-//                            Log.v(TAG, task.getResult().getPlace().getName());
-//                        });
 
     }
 }
