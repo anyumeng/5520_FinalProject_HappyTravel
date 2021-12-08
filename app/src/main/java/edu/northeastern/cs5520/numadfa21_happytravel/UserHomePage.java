@@ -324,6 +324,7 @@ public class UserHomePage extends AppCompatActivity {
                         historyList.clear();
                         adaptor.setPostList(postList);
                         adaptor.setHistoryList(historyList);
+                        adaptor.notifyDataSetChanged();
                         break;
                     }
                     default: break;
