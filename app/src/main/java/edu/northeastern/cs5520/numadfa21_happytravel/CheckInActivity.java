@@ -55,7 +55,7 @@ public class CheckInActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_check_in);
         if (!Places.isInitialized()) {
-            Places.initialize(getApplicationContext(), "AIzaSyD_BFmY9QN35Zxt_1HXXLHBHPmrat6wsww");
+            Places.initialize(getApplicationContext(), "AIzaSyDxBQXCrUd95_va2_cSBz-KeadVfoa1Vio");
         }
         this.client = Places.createClient(getApplicationContext());
 
