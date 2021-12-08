@@ -3,6 +3,7 @@ package edu.northeastern.cs5520.numadfa21_happytravel;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -243,6 +244,7 @@ public class MainActivity extends AppCompatActivity
                 this.autocompleteFragment
                         .getView()
                         .findViewById(R.id.places_autocomplete_search_input);
+        editText.setTextColor(Color.GREEN);
         editText.setText(pointOfInterest.name);
     }
 }
