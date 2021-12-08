@@ -31,10 +31,16 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.github.drjacky.imagepicker.ImagePicker;
-//import com.google.android.gms.cast.framework.media.ImagePicker;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.net.FetchPlaceResponse;
+import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -52,6 +58,7 @@ import java.util.Date;
 import java.util.HashSet;
 
 import edu.northeastern.cs5520.numadfa21_happytravel.R;
+import edu.northeastern.cs5520.numadfa21_happytravel.place.PlaceUtils;
 
 public class UserHomePage extends AppCompatActivity {
     public String TAG = "UserHomePage";
@@ -73,17 +80,31 @@ public class UserHomePage extends AppCompatActivity {
     private HomePagePostAdaptor adaptor;
     private static ArrayList<Post> postList = new ArrayList<>();
     private static ArrayList<TravelHistory> historyList = new ArrayList<>();
-    private String currentUserName;
+    //    private String currentUserName = "";
+    private String currentUserId = "";
     private static UserInfo currentUser = null;
     private static HashSet<String> nameSet = null;
-
+    private PlacesClient client;
+    private FirebaseAuth mAuth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_home_page);
+        mAuth = FirebaseAuth.getInstance();
+        /*
+        FirebaseUser user = this.mAuth.getCurrentUser();
+        intent.putExtra("userId", user.getUid());
+        intent.putExtra("userEmail", user.getEmail());
+        intent.putExtra("userName", user.getDisplayName());
+        intent.putExtra("checkInPlace", checkInPlace);
+         */
+        if (!Places.isInitialized()) {
+            Places.initialize(getApplicationContext(), "AIzaSyDxBQXCrUd95_va2_cSBz-KeadVfoa1Vio");
+        }
+        this.client = Places.createClient(getApplicationContext());
 //        DatabaseReference rootUser = FirebaseDatabase.getInstance().getReference(UserInfo.class.getSimpleName());
 //        ArrayList<String> temp = new ArrayList<>();
-//        UserInfo user = new UserInfo("dtt", "China", "", "", "", temp);
+//        UserInfo user = new UserInfo("pHdy73Chv3U3oqErdb6CzvcJu4k2", "ym an", "USA", "", "", "", temp);
 //        rootUser.push().setValue(user);
 
         cover = findViewById(R.id.imgBg);
@@ -98,20 +119,18 @@ public class UserHomePage extends AppCompatActivity {
 //        init(savedInstanceState);
 //        if (postList == null || postList.size() == 0) {
 //        postList = new ArrayList<>();
-        searchHistory(TravelHistory.class.getSimpleName(), "review_time", "2021-11-29T08:51:30.927Z");
+//        this.currentUserName = "cst";
+        this.currentUserId = "pHdy73Chv3U3oqErdb6CzvcJu4k2";
+        if (!currentUserId.equals(""))searchHistory(TravelHistory.class.getSimpleName(), "user_id", currentUserId);
 
 //        }
 //        else{
 //            createRecyclerView();
 //        }
-        this.currentUserName = "cst";
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-//            this.currentUserName = MainActivity.myName;
-            this.currentUserName = "cst";
-        }
+
+
         if (currentUser == null) {
-            readFormFirebase(UserInfo.class.getSimpleName(), "userName", currentUserName);
+            readFormFirebase(UserInfo.class.getSimpleName(), currentUserId, currentUserId);
         }
         else {
             initUserInfo();
@@ -190,10 +209,10 @@ public class UserHomePage extends AppCompatActivity {
      */
     public void initUserInfo() {
         //load image
-        if (currentUser.getImageUrl() != null || currentUser.getImageUrl().length() > 0) {
+        if (currentUser.getImageUrl() != null && currentUser.getImageUrl().length() > 0) {
             Glide.with(UserHomePage.this).load(currentUser.getImageUrl()).into(cover);
         }
-        if (currentUser.getProfileUrl() != null || currentUser.getProfileUrl().length() > 0) {
+        if (currentUser.getProfileUrl() != null && currentUser.getProfileUrl().length() > 0) {
             Glide.with(UserHomePage.this).load(currentUser.getProfileUrl()).into(profile);
         }
         //load username
@@ -287,12 +306,24 @@ public class UserHomePage extends AppCompatActivity {
             public boolean onMenuItemClick(MenuItem menuItem) {
                 switch (menuItem.getItemId()) {
                     case R.id.popup_setting_edit: {
-                        Log.d(TAG, "here");
                         createSettingDialog();
                         break;
                     }
                     case R.id.popup_setting_reward:{
                         //TODO: intent to Reward Activity
+                        Intent intentReward = new Intent(UserHomePage.this, RewardActivity.class);
+                        startActivity(intentReward);
+                        break;
+                    }
+                    case R.id.popup_setting_signout:{
+                        currentUserId = "";
+                        tvUserName.setText("");
+                        cover.setImageResource(R.mipmap.bg_grey);
+                        profile.setImageResource(R.mipmap.defaultphoto);
+                        postList.clear();
+                        historyList.clear();
+                        adaptor.setPostList(postList);
+                        adaptor.setHistoryList(historyList);
                         break;
                     }
                     default: break;
@@ -313,8 +344,13 @@ public class UserHomePage extends AppCompatActivity {
         addFriendProfile = settingPopup.findViewById(R.id.imgProfileAdd);
         tvError = settingPopup.findViewById(R.id.tvError);
         tvFollowedError = settingPopup.findViewById(R.id.tvFollowedError);
-        if (currentUser.getProfileUrl() != null && currentUser.getProfileUrl().length() > 0) {
-            Glide.with(UserHomePage.this).load(currentUser.getProfileUrl()).into(addFriendProfile);
+        if (currentUserId.equals("")) {
+            addFriendProfile.setImageResource(R.mipmap.defaultphoto);
+        }
+        else {
+            if (currentUser.getProfileUrl() != null && currentUser.getProfileUrl().length() > 0) {
+                Glide.with(UserHomePage.this).load(currentUser.getProfileUrl()).into(addFriendProfile);
+            }
         }
 
         dialogBuilder.setView(settingPopup);
@@ -333,34 +369,47 @@ public class UserHomePage extends AppCompatActivity {
         btnFollow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String friend = edtFriend.getText().toString();
-                if (nameSet.contains(friend)) {
-                    tvError.setVisibility(View.INVISIBLE);
-                    tvFollowedError.setVisibility(View.INVISIBLE);
-                    ArrayList<String> temp = currentUser.getFriends();
-                    boolean isExist = false;
-                    for (int i = 0; i < temp.size(); i++) {
-                        if (temp.get(i).equals(friend)) {
-                            isExist = true;
-                            break;
-                        }
-                    }
-                    if (isExist) {
-                        tvFollowedError.setVisibility(View.VISIBLE);
-                    }
-                    else {
-                        temp.add(friend);
-                        currentUser.setFriends(temp);
-                        DatabaseReference rootUser = FirebaseDatabase.getInstance().getReference(UserInfo.class.getSimpleName());
-                        String userKey = currentUser.getKey();
-                        rootUser.child(userKey).setValue(currentUser);
-                        Toast.makeText(UserHomePage.this, "Update Successfully", Toast.LENGTH_SHORT).show();
-                        dialog.dismiss();
-                    }
+                if (currentUserId.equals("")) {
+                    Snackbar.make(UserHomePage.this, settingPopup, "Please Log in first", Snackbar.LENGTH_SHORT)
+                            .setAction("OK", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    dialog.dismiss();
+                                }
+                            })
+                            .show();
                 }
                 else {
-                    tvError.setVisibility(View.VISIBLE);
+                    String friend = edtFriend.getText().toString();
+                    if (nameSet.contains(friend)) {
+                        tvError.setVisibility(View.INVISIBLE);
+                        tvFollowedError.setVisibility(View.INVISIBLE);
+                        ArrayList<String> temp = currentUser.getFriends();
+                        boolean isExist = false;
+                        for (int i = 0; i < temp.size(); i++) {
+                            if (temp.get(i).equals(friend)) {
+                                isExist = true;
+                                break;
+                            }
+                        }
+                        if (isExist) {
+                            tvFollowedError.setVisibility(View.VISIBLE);
+                        }
+                        else {
+                            temp.add(friend);
+                            currentUser.setFriends(temp);
+                            DatabaseReference rootUser = FirebaseDatabase.getInstance().getReference(UserInfo.class.getSimpleName());
+//                            String userKey = currentUser.getKey();
+                            rootUser.child(currentUserId).setValue(currentUser);
+                            Toast.makeText(UserHomePage.this, "Update Successfully", Toast.LENGTH_SHORT).show();
+                            dialog.dismiss();
+                        }
+                    }
+                    else {
+                        tvError.setVisibility(View.VISIBLE);
+                    }
                 }
+
             }
         });
 
@@ -392,11 +441,19 @@ public class UserHomePage extends AppCompatActivity {
         btnSubmit = settingPopup.findViewById(R.id.btnSubmit);
         btnCancel = settingPopup.findViewById(R.id.btnCancel);
         popupProfile = settingPopup.findViewById(R.id.imgProfileAdd);
-        edtUserName.setText(currentUser.getUserName());
-        edtBirthday.setText(currentUser.getBirthday());
-        edtRegion.setText(currentUser.getRegion());
-        if (currentUser.getProfileUrl() != null && currentUser.getProfileUrl().length() > 0) {
-            Glide.with(UserHomePage.this).load(currentUser.getProfileUrl()).into(popupProfile);
+        if (currentUserId.equals("")) {
+            edtUserName.setText("");
+            edtBirthday.setText("");
+            edtRegion.setText("");
+            popupProfile.setImageResource(R.mipmap.defaultphoto);
+        }
+        else {
+            edtUserName.setText(currentUser.getUserName());
+            edtBirthday.setText(currentUser.getBirthday());
+            edtRegion.setText(currentUser.getRegion());
+            if (currentUser.getProfileUrl() != null && currentUser.getProfileUrl().length() > 0) {
+                Glide.with(UserHomePage.this).load(currentUser.getProfileUrl()).into(popupProfile);
+            }
         }
 
         dialogBuilder.setView(settingPopup);
@@ -413,44 +470,62 @@ public class UserHomePage extends AppCompatActivity {
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String newUserName = edtUserName.getText().toString();
-                String newBirthday = edtBirthday.getText().toString();
-                String newRegion = edtRegion.getText().toString();
-                boolean valid = isValidInfo(newUserName, newBirthday, newRegion);
-                if (valid) {
-                    currentUserName = newUserName;
-                    currentUser.setUserName(newUserName);
-                    currentUser.setBirthday(newBirthday);
-                    currentUser.setRegion(newRegion);
-                    DatabaseReference rootUser = FirebaseDatabase.getInstance().getReference(UserInfo.class.getSimpleName());
-                    String userKey = currentUser.getKey();
-                    rootUser.child(userKey).setValue(currentUser);
+                if (currentUserId.equals("")) {
+                    Snackbar.make(UserHomePage.this, settingPopup, "Please Log in first", Snackbar.LENGTH_SHORT)
+                            .setAction("OK", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    dialog.dismiss();
+                                }
+                            })
+                            .show();
+                }
+                else {
+                    String newUserName = edtUserName.getText().toString();
+                    String newBirthday = edtBirthday.getText().toString();
+                    String newRegion = edtRegion.getText().toString();
+                    boolean valid = isValidInfo(newUserName, newBirthday, newRegion);
+                    if (valid) {
+//                        currentUserName = newUserName;
+                        currentUser.setUserName(newUserName);
+                        currentUser.setBirthday(newBirthday);
+                        currentUser.setRegion(newRegion);
+                        DatabaseReference rootUser = FirebaseDatabase.getInstance().getReference(UserInfo.class.getSimpleName());
+//                        String userKey = currentUser.getKey();
+                        rootUser.child(currentUserId).setValue(currentUser);
 
 //                    rootUser.child(userKey)
 //                            .child("region")
 //                            .setValue(newRegion);
-                    Toast.makeText(UserHomePage.this, "Update Successfully", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(UserHomePage.this, "Update Successfully", Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+                        Toast.makeText(UserHomePage.this, "invalid information", Toast.LENGTH_SHORT).show();
+                    }
+                    dialog.dismiss();
                 }
-                else {
-                    Toast.makeText(UserHomePage.this, "invalid information", Toast.LENGTH_SHORT).show();
-                }
-                dialog.dismiss();
+
             }
         });
     }
     private void readFormFirebase(String dbName, String refKey, String refValue) {
         DatabaseReference rootUser = FirebaseDatabase.getInstance().getReference(dbName);
         Toast.makeText(UserHomePage.this, "Read current user", Toast.LENGTH_SHORT).show();
-        rootUser.orderByChild(refKey)
-                .equalTo(refValue)
+        rootUser
+//        rootUser.orderByChild(refKey)
+//                .equalTo(refValue)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         for (DataSnapshot childSnapshot: dataSnapshot.getChildren()) {
-                            String userKey = childSnapshot.getKey();
-                            currentUser = childSnapshot.getValue(UserInfo.class);
-                            currentUser.setKey(userKey);
-                            initUserInfo();
+                            if (childSnapshot.getKey().equals(refKey)) {
+                                currentUser = childSnapshot.getValue(UserInfo.class);
+                                initUserInfo();
+                                break;
+                            }
+//                            currentUser = childSnapshot.getValue(UserInfo.class);
+////                            currentUser.setKey(userKey);
+//                            initUserInfo();
                         }
                         Toast.makeText(UserHomePage.this, currentUser.getImageUrl(), Toast.LENGTH_SHORT).show();
                     }
@@ -474,8 +549,19 @@ public class UserHomePage extends AppCompatActivity {
                             TravelHistory history = childSnapshot.getValue(TravelHistory.class);
                             history.setKey(childSnapshot.getKey());
                             historyList.add(history);
-                            Post post = new Post(history.getReview_photo_path(), UserHomePage.this, history.getPlace_id(), history.getReview_time(), history.getReview_stars());
+                            Post post = new Post(history.getReview_photo_path(), UserHomePage.this, history.getPlace_name(), history.getReview_time(), history.getReview_stars());
                             postList.add(post);
+//                            PlaceUtils.getPlace(history.getPlace_id(), client)
+//                                    .addOnCompleteListener(new OnCompleteListener<FetchPlaceResponse>() {
+//                                        @Override
+//                                        public void onComplete(@NonNull Task<FetchPlaceResponse> task) {
+//                                            String place = task.getResult().getPlace().getName();
+//                                            Post post = new Post(history.getReview_photo_path(), UserHomePage.this, place, history.getReview_time(), history.getReview_stars());
+//                                            postList.add(post);
+//                                            Toast.makeText(UserHomePage.this, "Add post: " + place, Toast.LENGTH_SHORT).show();
+//                                        }
+//                                    });
+
 //                            Post post = new Post("", UserHomePage.this, user.getUserName(), user.getBirthday(), "5.0");
 //                            postList.add(post);
                             /*
@@ -526,8 +612,9 @@ public class UserHomePage extends AppCompatActivity {
         });
     }
     private boolean isValidInfo(String userName, String birthday, String Region) {
-        if (!userName.equals(currentUserName) && nameSet.contains(userName)) return false;
+        if (!userName.equals(currentUser.getUserName()) && nameSet.contains(userName)) return false;
         if (birthday.length() > 0) {
+            Toast.makeText(UserHomePage.this, String.valueOf(birthday.length()), Toast.LENGTH_SHORT).show();
             SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy");
             df.setLenient(false);
             Date testDate = null;
@@ -552,14 +639,14 @@ public class UserHomePage extends AppCompatActivity {
                     @Override
                     public void onSuccess(Uri uri) {
                         DatabaseReference rootUser = FirebaseDatabase.getInstance().getReference(UserInfo.class.getSimpleName());
-                        String userKey = currentUser.getKey();
+//                        String userKey = currentUser.getKey();
                         if (code == COVER_CODE) {
                             currentUser.setImageUrl(uri.toString());
-                            rootUser.child(userKey).setValue(currentUser);
+                            rootUser.child(currentUserId).setValue(currentUser);
                         }
                         else if (code == PROFILE_CODE) {
                             currentUser.setProfileUrl(uri.toString());
-                            rootUser.child(userKey).setValue(currentUser);
+                            rootUser.child(currentUserId).setValue(currentUser);
                         }
 
                         Toast.makeText(UserHomePage.this, "Update Successfully", Toast.LENGTH_SHORT).show();

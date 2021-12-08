@@ -10,4 +10,7 @@
         android:id="@+id/popup_setting_reward"
         android:icon="@drawable/ic_reward"
         android:title="Reward" />
+    <item
+        android:id="@+id/popup_setting_signout"
+        android:title="Sign out" />
 </menu>
