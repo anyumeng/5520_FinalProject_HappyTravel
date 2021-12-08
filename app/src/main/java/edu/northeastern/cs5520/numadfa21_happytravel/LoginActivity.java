@@ -19,6 +19,17 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import edu.northeastern.cs5520.numadfa21_happytravel.model.PlaceTypeMapping;
 
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "google_sign_in";
@@ -116,6 +127,7 @@ public class LoginActivity extends AppCompatActivity {
                                     // Sign in success, update UI with the signed-in user's
                                     // information
                                     Log.d(TAG, "signInWithCredential:success");
+                                    updateNewUser(task.getResult().getUser());
                                     goMain();
                                 } else {
                                     // If sign in fails, display a message to the user.
@@ -127,6 +139,28 @@ public class LoginActivity extends AppCompatActivity {
                                 // reload();
                             }
                         });
+    }
+
+    private void updateNewUser(FirebaseUser user) {
+        UserInfo userInfo = new UserInfo();
+        userInfo.setUserName(user.getDisplayName());
+        userInfo.setFriends(new ArrayList<>());
+        userInfo.setEmail(user.getEmail());
+        userInfo.setRegion("");
+        userInfo.setBirthday("");
+        userInfo.setProfileUrl("");
+        userInfo.setImageUrl("");
+        Map<String, Integer> posts = PlaceTypeMapping.getAllIds().stream().collect(Collectors.toMap(id -> id, id -> 0));
+        userInfo.setPost(posts);
+        DatabaseReference userDb = FirebaseDatabase.getInstance().getReference("UserInfo");
+        userDb.child(user.getUid()).get().addOnCompleteListener(task -> {
+            if(task.isSuccessful() && task.getResult().getValue() != null) {
+                Log.v(TAG, task.getResult().toString());
+                return;
+            }
+            Log.v(TAG, user.getUid());
+            userDb.child(user.getUid()).setValue(userInfo);
+        });
     }
 
     @Override

@@ -96,6 +96,7 @@ public class MainActivity extends AppCompatActivity
                 (AutocompleteSupportFragment)
                         getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment);
 
+
         // Specify the types of place data to return.
         autocompleteFragment.setPlaceFields(
                 Arrays.asList(
@@ -108,6 +109,10 @@ public class MainActivity extends AppCompatActivity
                     public void onPlaceSelected(@NonNull Place place) {
                         selectedPlaceId = Optional.of(place.getId());
                         gotoLocation(place.getLatLng());
+                        EditText editText = autocompleteFragment
+                                        .getView()
+                                        .findViewById(R.id.places_autocomplete_search_input);
+                        editText.setTextColor(Color.GREEN);
                     }
 
                     @Override

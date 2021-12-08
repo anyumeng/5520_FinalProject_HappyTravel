@@ -172,7 +172,7 @@ public class CheckInActivity extends AppCompatActivity {
         db.child("review_photo_path").setValue(this.photoPath.orElse(""));
         db.child("review_time").setValue(Instant.now().toString());
 
-        DatabaseReference userDb = FirebaseDatabase.getInstance().getReference("UserInfoTest").child(this.userId);
+        DatabaseReference userDb = FirebaseDatabase.getInstance().getReference("UserInfo").child(this.userId);
         userDb.get().addOnCompleteListener(task -> {
            User user = task.getResult().getValue(User.class);
            Map<String, Integer> posts = user.getPost();
