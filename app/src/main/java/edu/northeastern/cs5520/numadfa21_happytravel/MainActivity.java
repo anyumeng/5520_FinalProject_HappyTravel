@@ -77,6 +77,11 @@ public class MainActivity extends AppCompatActivity
         startActivity(intent);
     }
 
+    public void openHomePageActivity(View view) {
+        Intent intent = new Intent(this, UserHomePage.class);
+        startActivity(intent);
+    }
+
     // =========End of Friend Activity==========
 
     // ===============End of Google Sign in Part================

@@ -15,11 +15,27 @@
       },
       "oauth_client": [
         {
-          "client_id": "900066446915-0jihivvvknpvlfmbersnfb2299r00rce.apps.googleusercontent.com",
+          "client_id": "900066446915-0ilnjth6e0fkek5dfgcgn5jbo1p0rb11.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "edu.northeastern.cs5520.numadfa21_happytravel",
+            "certificate_hash": "93030177a37a99d03d7e878afbb4311ec5f6022f"
+          }
+        },
+        {
+          "client_id": "900066446915-j2oqir8e2e76bqji9q5tslsunh3ies1d.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "edu.northeastern.cs5520.numadfa21_happytravel",
             "certificate_hash": "2a03c86554d3a8121182889876cc182e0f57e63f"
+          }
+        },
+        {
+          "client_id": "900066446915-pdpdjqmpbsmlbekkrk9cg2ob52gi3sa7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "edu.northeastern.cs5520.numadfa21_happytravel",
+            "certificate_hash": "3cc72d7c715865b6cbf32605e6482c35dab3790c"
           }
         },
         {
@@ -36,7 +52,7 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "900066446915-f37btho57t91krdkv3ju7biqk5614kk8.apps.googleusercontent.com",
+              "client_id": "900066446915-28tk3imn7n31j1svos00ca35okoamp0j.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
