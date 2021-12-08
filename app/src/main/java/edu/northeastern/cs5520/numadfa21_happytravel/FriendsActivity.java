@@ -73,6 +73,7 @@ public class FriendsActivity extends AppCompatActivity {
                     if(userInfo.getUserName().equals(currentUserName)) {
                         ArrayList<String> friendList = userInfo.getFriends();
                         friendSet.addAll(friendList);
+                        Log.v(TAG, "Get all friend ids");
                         break;
                     }
                 }
@@ -87,11 +88,13 @@ public class FriendsActivity extends AppCompatActivity {
 
         // transfer place id to place name
         // create the place client
-        if (!Places.isInitialized()) {
-            Places.initialize(getApplicationContext(), "AIzaSyDxBQXCrUd95_va2_cSBz-KeadVfoa1Vio");
-        }
-        PlacesClient client = Places.createClient(getApplicationContext());
+//        if (!Places.isInitialized()) {
+//            Places.initialize(getApplicationContext(), "AIzaSyDxBQXCrUd95_va2_cSBz-KeadVfoa1Vio");
+//        }
+//        PlacesClient client = Places.createClient(getApplicationContext());
 
+
+        Log.v(TAG, "start to get friend post");
 
         // show the posts of the given user
         DatabaseReference reference =
@@ -115,10 +118,12 @@ public class FriendsActivity extends AppCompatActivity {
 
 //                        PlaceUtils.getPlace(travelHistory.getPlace_id(), client).addOnCompleteListener(
 //                                task -> {
+//                                    Log.v(TAG, "each place");
 //                                    Log.v(TAG, task.getResult().getPlace().getName());
+//                                    places.add(task.getResult().getPlace().getName());
 //                        });
 
-                        places.add(travelHistory.getPlace_id().substring(0,4));
+                        places.add(travelHistory.getPlace_name());
                         review_stars.add(Float.parseFloat(travelHistory.getReview_stars()));
                         review_contents.add(travelHistory.getReview_content());
                     }
@@ -129,6 +134,7 @@ public class FriendsActivity extends AppCompatActivity {
                     review_stars_array[i] = review_stars.get(i);
                 }
 
+                Log.v(TAG, "generate view");
                 recyclerView = findViewById(R.id.recyclerViewFriends);
                 FriendAdpater friendAdapter = new FriendAdpater(FriendsActivity.this,
                         images.toArray(new String[images.size()]),

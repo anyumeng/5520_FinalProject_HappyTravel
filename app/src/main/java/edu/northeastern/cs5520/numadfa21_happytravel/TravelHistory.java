@@ -10,6 +10,7 @@ public class TravelHistory {
     private String user_id;
     private String user_name = "";
     private String user_email = "";
+    private String place_name = "";
     private String key;
     public TravelHistory() {
 
@@ -95,6 +96,14 @@ public class TravelHistory {
 
     public void setUser_email(String user_email) {
         this.user_email = user_email;
+    }
+
+    public String getPlace_name() {
+        return place_name;
+    }
+
+    public void setPlace_name(String place_name) {
+        this.place_name = place_name;
     }
 
     public String getKey() {
