@@ -11,9 +11,15 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
+
 public class FriendAdpater extends RecyclerView.Adapter<FriendAdpater.FriendViewHolder> {
     private Context context;
-    private int[] images;
+    private String[] images;
     private String[] names;
     private String[] places;
     private float[] review_stars;
@@ -21,7 +27,7 @@ public class FriendAdpater extends RecyclerView.Adapter<FriendAdpater.FriendView
 
     public FriendAdpater(
             Context ct,
-            int[] images,
+            String[] images,
             String[] names,
             String[] places,
             float[] review_stars,
@@ -44,7 +50,14 @@ public class FriendAdpater extends RecyclerView.Adapter<FriendAdpater.FriendView
 
     @Override
     public void onBindViewHolder(@NonNull FriendViewHolder holder, int position) {
-        holder.image.setImageResource(images[position]);
+        if(!images[position].equals("")) {
+            StorageReference storageReference = FirebaseStorage.getInstance().getReference().child(images[position]);
+            Glide.with(context)
+                    .using(new FirebaseImageLoader())
+                    .load(storageReference)
+                    .into(holder.image);
+        }
+
         holder.name.setText(names[position]);
         holder.place.setText(places[position]);
         holder.review_content.setText(review_contents[position]);
