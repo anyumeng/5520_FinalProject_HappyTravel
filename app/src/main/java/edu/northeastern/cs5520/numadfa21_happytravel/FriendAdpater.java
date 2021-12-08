@@ -58,6 +58,7 @@ public class FriendAdpater extends RecyclerView.Adapter<FriendAdpater.FriendView
                     .into(holder.image);
         }
 
+        holder.marker.setImageResource(R.drawable.marker);
         holder.name.setText(names[position]);
         holder.place.setText(places[position]);
         holder.review_content.setText(review_contents[position]);
@@ -71,7 +72,7 @@ public class FriendAdpater extends RecyclerView.Adapter<FriendAdpater.FriendView
     }
 
     public class FriendViewHolder extends RecyclerView.ViewHolder {
-        ImageView image;
+        ImageView image, marker;
         TextView name, place, review_content;
         RatingBar review_star;
 
@@ -84,6 +85,7 @@ public class FriendAdpater extends RecyclerView.Adapter<FriendAdpater.FriendView
             LinearLayout.LayoutParams parms = new LinearLayout.LayoutParams(width, height);
             image.setLayoutParams(parms);
 
+            marker = itemView.findViewById(R.id.imageViewMarker);
             name = itemView.findViewById(R.id.textViewName);
             place = itemView.findViewById(R.id.textViewPlace);
             review_content = itemView.findViewById(R.id.textViewReviewContent);
