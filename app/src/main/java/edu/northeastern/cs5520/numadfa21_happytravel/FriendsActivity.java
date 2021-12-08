@@ -42,13 +42,7 @@ public class FriendsActivity extends AppCompatActivity {
 //    private String[] review_contents = {"Good", "Great!"};
 
 //    private List<String> images = new ArrayList<>();
-    private List<String> images = new ArrayList<>(Arrays.asList("reviews/b6f01554-97dc-4941-a2c7-1aaf62fc5847.jpg",
-        "reviews/b6f01554-97dc-4941-a2c7-1aaf62fc5847.jpg",
-        "reviews/b6f01554-97dc-4941-a2c7-1aaf62fc5847.jpg",
-        "reviews/b6f01554-97dc-4941-a2c7-1aaf62fc5847.jpg",
-        "reviews/b6f01554-97dc-4941-a2c7-1aaf62fc5847.jpg",
-        "reviews/b6f01554-97dc-4941-a2c7-1aaf62fc5847.jpg",
-        "reviews/b6f01554-97dc-4941-a2c7-1aaf62fc5847.jpg"));
+    private List<String> images = new ArrayList<>();
     private List<String> names = new ArrayList<>();
     private List<String> places = new ArrayList<>();
     private List<Float> review_stars = new ArrayList<>();
@@ -78,7 +72,12 @@ public class FriendsActivity extends AppCompatActivity {
                     TravelHistory travelHistory = snapshot.getValue(TravelHistory.class);
 
                     if(travelHistory.getUser_name().equals(currentUserName)) {
-                        //images.add(travelHistory.getReview_photo_path());
+                        if(travelHistory.getReview_photo_path() == null) {
+                            images.add("");
+                        }else {
+                            images.add(travelHistory.getReview_photo_path());
+                        }
+
                         names.add(travelHistory.getUser_name());
                         places.add(travelHistory.getPlace_id().substring(0,4));
                         review_stars.add(Float.parseFloat(travelHistory.getReview_stars()));

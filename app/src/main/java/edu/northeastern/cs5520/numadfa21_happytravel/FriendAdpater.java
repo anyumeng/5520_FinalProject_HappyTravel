@@ -16,7 +16,6 @@ import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-import java.io.InputStream;
 
 public class FriendAdpater extends RecyclerView.Adapter<FriendAdpater.FriendViewHolder> {
     private Context context;
@@ -51,11 +50,14 @@ public class FriendAdpater extends RecyclerView.Adapter<FriendAdpater.FriendView
 
     @Override
     public void onBindViewHolder(@NonNull FriendViewHolder holder, int position) {
-        StorageReference storageReference = FirebaseStorage.getInstance().getReference().child(images[position]);
-        Glide.with(context)
-                .using(new FirebaseImageLoader())
-                .load(storageReference)
-                .into(holder.image);
+        if(!images[position].equals("")) {
+            StorageReference storageReference = FirebaseStorage.getInstance().getReference().child(images[position]);
+            Glide.with(context)
+                    .using(new FirebaseImageLoader())
+                    .load(storageReference)
+                    .into(holder.image);
+        }
+
         holder.name.setText(names[position]);
         holder.place.setText(places[position]);
         holder.review_content.setText(review_contents[position]);
