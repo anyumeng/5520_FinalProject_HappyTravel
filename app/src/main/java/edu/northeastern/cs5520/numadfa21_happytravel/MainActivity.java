@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity
     private void setupAutoComplete() {
         // Setup auto completion view.
         // Initialize the AutocompleteSupportFragment.
-        Places.initialize(getApplicationContext(), "AIzaSyCy17aCHfCwb7B_Tka2hwS5SoHomaUzKM8");
+        Places.initialize(getApplicationContext(), "AIzaSyDxBQXCrUd95_va2_cSBz-KeadVfoa1Vio");
 
         this.autocompleteFragment =
                 (AutocompleteSupportFragment)
