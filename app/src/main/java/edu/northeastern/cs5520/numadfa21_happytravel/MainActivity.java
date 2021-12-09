@@ -73,11 +73,6 @@ public class MainActivity extends AppCompatActivity
         startActivity(intent);
     }
 
-    public void openRewardActivity(View view) {
-        Intent intent = new Intent(this, RewardActivity.class);
-        startActivity(intent);
-    }
-
     public void openHomePageActivity(View view) {
         Intent intent = new Intent(this, UserHomePage.class);
         startActivity(intent);
