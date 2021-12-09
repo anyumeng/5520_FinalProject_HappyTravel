@@ -75,6 +75,8 @@ dependencies {
     implementation 'de.hdodenhof:circleimageview:3.1.0'
     implementation 'com.firebaseui:firebase-ui-storage:2.4.0'
 
+    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.19'
+
 }
 
 spotless {

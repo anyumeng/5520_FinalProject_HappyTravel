@@ -114,4 +114,21 @@ public class TravelHistory {
     public void setKey(String key) {
         this.key = key;
     }
+
+    @Override
+    public String toString() {
+        return "TravelHistory{" +
+                "place_id='" + place_id + '\'' +
+                ", place_name='" + place_name + '\'' +
+                ", review_content='" + review_content + '\'' +
+                ", review_photo_path='" + review_photo_path + '\'' +
+                ", review_stars='" + review_stars + '\'' +
+                ", review_time='" + review_time + '\'' +
+                ", type='" + type + '\'' +
+                ", user_id='" + user_id + '\'' +
+                ", user_name='" + user_name + '\'' +
+                ", user_email='" + user_email + '\'' +
+                ", key='" + key + '\'' +
+                '}';
+    }
 }

@@ -5,13 +5,6 @@
     android:orientation="vertical">
 
     <ImageButton
-        android:id="@+id/reward_popup"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="openRewardActivity"
-        android:src="@drawable/ic_round_recommendation_36" />
-
-    <ImageButton
         android:id="@+id/recommendation_popup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

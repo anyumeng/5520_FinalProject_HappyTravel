@@ -162,16 +162,18 @@ public class CheckInActivity extends AppCompatActivity {
         if (this.userId == null) {
             this.userId = "unknown";
         }
-        db.child("user_name").setValue(this.userName);
-        db.child("user_id").setValue(this.userId);
-        db.child("user_email").setValue(this.userEmail);
-        db.child("place_id").setValue(this.uploadPlace.get().getId());
-        db.child("place_name").setValue(this.uploadPlace.get().getName());
-        db.child("review_content").setValue(this.reviewTextView.getText().toString());
-        db.child("review_stars").setValue(String.valueOf(this.ratingBar.getRating()));
-        db.child("type").setValue(this.spinner.getSelectedItem().toString());
-        db.child("review_photo_path").setValue(this.photoPath.orElse(""));
-        db.child("review_time").setValue(Instant.now().toString());
+        TravelHistory history = new TravelHistory();
+        history.setUser_name(this.userName);
+        history.setUser_id(this.userId);
+        history.setUser_email(this.userEmail);
+        history.setPlace_id(this.uploadPlace.get().getId());
+        history.setPlace_name(this.uploadPlace.get().getName());
+        history.setReview_content(this.reviewTextView.getText().toString());
+        history.setReview_stars(String.valueOf(this.ratingBar.getRating()));
+        history.setType(this.spinner.getSelectedItem().toString());
+        history.setReview_photo_path(this.photoPath.orElse(""));
+        history.setReview_time(Instant.now().toString());
+        db.setValue(history);
 
         DatabaseReference userDb = FirebaseDatabase.getInstance().getReference("UserInfo").child(this.userId);
         userDb.get().addOnCompleteListener(task -> {

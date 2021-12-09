@@ -151,6 +151,7 @@ public class LoginActivity extends AppCompatActivity {
         userInfo.setProfileUrl("");
         userInfo.setImageUrl("");
         Map<String, Integer> posts = PlaceTypeMapping.getAllIds().stream().collect(Collectors.toMap(id -> id, id -> 0));
+        posts.put("post", 0);
         userInfo.setPost(posts);
         DatabaseReference userDb = FirebaseDatabase.getInstance().getReference("UserInfo");
         userDb.child(user.getUid()).get().addOnCompleteListener(task -> {
