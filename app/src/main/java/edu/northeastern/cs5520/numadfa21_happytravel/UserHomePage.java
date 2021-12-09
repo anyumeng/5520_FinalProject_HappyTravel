@@ -91,14 +91,12 @@ public class UserHomePage extends AppCompatActivity {
         cameraPermission = new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
         storagePermission = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE};
 
-        if (currentUserId != null) {
-            searchHistory(TravelHistory.class.getSimpleName(), "user_id", currentUserId);
-        }
-
         if (!currentUser.isPresent()) {
             getCurrentUser(currentUserId);
+        } else {
+            searchHistory();
+            initUserInfo();
         }
-        initUserInfo();
 
         fabCover.setOnClickListener(view -> {
             REQUEST_CODE = 10;
@@ -125,6 +123,8 @@ public class UserHomePage extends AppCompatActivity {
         menu.setOnClickListener(view -> showPopupMenu(view));
 
         addFriendButton.setOnClickListener(view -> createAddFriendDialog());
+
+        createRecyclerView();
     }
 
     /**
@@ -328,8 +328,7 @@ public class UserHomePage extends AppCompatActivity {
                         UserInfo friend = userSnapshot.getValue(UserInfo.class);
                         friend.setKey(userSnapshot.getKey());
                         if(friend.getEmail() != null && friend.getEmail().equals(friendEmail)) {
-                            tvError.setVisibility(View.INVISIBLE);
-                            tvFollowedError.setVisibility(View.INVISIBLE);
+
 // Uncommment the following code if you want add follower in the list of followed's
 //                            ArrayList<String> friendIds = friend.getFriends();
 //                            if (friendIds.contains(myself.getKey())) {
@@ -341,15 +340,15 @@ public class UserHomePage extends AppCompatActivity {
 //                                userRef.child(friend.getKey()).child("friends").setValue(friend.getFriends());
 //                            }
                             if (myself.getFriends().contains(friend.getKey())) {
-                                tvFollowedError.setVisibility(View.VISIBLE);
+                                Toast.makeText(UserHomePage.this, String.format("You've followed: %s", friend.getUserName()), Toast.LENGTH_SHORT).show();
                             } else {
                                 myself.getFriends().add(friend.getKey());
                                 userRef.child(myself.getKey()).child("friends").setValue(myself.getFriends());
                             }
-                            break;
+                            return;
                         }
                     }
-                    tvError.setVisibility(View.VISIBLE);
+                    Toast.makeText(UserHomePage.this, String.format("This user does not exist: %s", friendEmail), Toast.LENGTH_SHORT).show();
                 }
             });
         });
@@ -412,19 +411,24 @@ public class UserHomePage extends AppCompatActivity {
             if(task.isSuccessful()) {
                 this.currentUser = Optional.of(task.getResult().getValue(UserInfo.class));
                 this.currentUser.get().setKey(task.getResult().getKey());
+                searchHistory();
                 initUserInfo();
             }
         });
     }
 
-    private void searchHistory(String dbName, String refKey, String refValue) {
-
-        DatabaseReference rootUser = FirebaseDatabase.getInstance().getReference(dbName);
-        rootUser.orderByChild(refKey)
-                .equalTo(refValue)
+    private void searchHistory() {
+        DatabaseReference historyRef = FirebaseDatabase.getInstance().getReference("TravelHistory");
+        historyRef.orderByChild("user_id")
+                .equalTo(this.currentUser.get().getKey())
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        int size = historyList.size();
+                        historyList.clear();
+                        postList.clear();
+                        adaptor.notifyItemRangeRemoved(0, size);
+                        int i = 0;
                         for (DataSnapshot childSnapshot: dataSnapshot.getChildren()) {
 //                            UserInfo user = childSnapshot.getValue(UserInfo.class);
                             TravelHistory history = childSnapshot.getValue(TravelHistory.class);
@@ -432,34 +436,8 @@ public class UserHomePage extends AppCompatActivity {
                             historyList.add(history);
                             Post post = new Post(history.getReview_photo_path(), UserHomePage.this, history.getPlace_name(), history.getReview_time(), history.getReview_stars());
                             postList.add(post);
-//                            PlaceUtils.getPlace(history.getPlace_id(), client)
-//                                    .addOnCompleteListener(new OnCompleteListener<FetchPlaceResponse>() {
-//                                        @Override
-//                                        public void onComplete(@NonNull Task<FetchPlaceResponse> task) {
-//                                            String place = task.getResult().getPlace().getName();
-//                                            Post post = new Post(history.getReview_photo_path(), UserHomePage.this, place, history.getReview_time(), history.getReview_stars());
-//                                            postList.add(post);
-//                                            Toast.makeText(UserHomePage.this, "Add post: " + place, Toast.LENGTH_SHORT).show();
-//                                        }
-//                                    });
-
-//                            Post post = new Post("", UserHomePage.this, user.getUserName(), user.getBirthday(), "5.0");
-//                            postList.add(post);
-                            /*
-                            Object obj = childSnapshot.getValue();
-                            try{
-                                HashMap<String, Object> userData = (HashMap<String, Object>) obj;
-//                                Post post = new Post((String) userData.get("review_photo_path"), UserHomePage.this, (String) userData.get("place_id"), (String) userData.get("review_time"), (String) userData.get("review_stars"));
-                                Post post = new Post("", UserHomePage.this, "gogong", "2020", "5");
-                                postList.add(post);
-                            }catch (ClassCastException cce){
-                                Toast.makeText(UserHomePage.this, "error", Toast.LENGTH_SHORT).show();
-                            }
-                             */
-
                         }
-                        createRecyclerView();
-
+                        adaptor.notifyDataSetChanged();
                     }
 
                     @Override
@@ -542,7 +520,6 @@ public class UserHomePage extends AppCompatActivity {
         adaptor = new HomePagePostAdaptor(UserHomePage.this, storageRef);
         adaptor.setPostList(postList);
         adaptor.setHistoryList(historyList);
-        adaptor.notifyDataSetChanged();
         recyclerView.setAdapter(adaptor);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
