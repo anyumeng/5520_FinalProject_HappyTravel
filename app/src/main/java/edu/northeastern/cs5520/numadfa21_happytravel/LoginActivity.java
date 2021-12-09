@@ -56,8 +56,7 @@ public class LoginActivity extends AppCompatActivity {
         GoogleSignInOptions gso =
                 new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                         .requestIdToken(
-                                "900066446915-f37btho57t91krdkv3ju7biqk5614kk8.apps"
-                                        + ".googleusercontent.com")
+                                "900066446915-f37btho57t91krdkv3ju7biqk5614kk8.apps.googleusercontent.com")
                         .requestEmail()
                         .build();
 
@@ -67,12 +66,11 @@ public class LoginActivity extends AppCompatActivity {
         // Check for existing Google Sign In account, if the user is already signed in
         // the GoogleSignInAccount will be non-null.
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
-        if (account != null) {
-            Log.v(TAG, String.format("account:%s", account.getEmail()));
+        mAuth = FirebaseAuth.getInstance();
+        if (mAuth.getCurrentUser() != null) {
+            Log.v(TAG, String.format("account:%s", mAuth.getCurrentUser().getEmail()));
             goMain();
         }
-
-        mAuth = FirebaseAuth.getInstance();
 
         // Set the dimensions of the sign-in button.
         SignInButton signInButton = findViewById(R.id.sign_in_button);
