@@ -78,6 +78,10 @@ public class MainActivity extends AppCompatActivity
         startActivity(intent);
     }
 
+    public void openRecommendationActivity(View view) {
+        Intent intent = new Intent(this, RecommendationActivity.class);
+        startActivity(intent);
+    }
     // =========End of Friend Activity==========
 
     // ===============End of Google Sign in Part================
