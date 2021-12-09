@@ -33,7 +33,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:text="UserId/UserName"
+            android:text="User Email"
             android:textSize="15dp"/>
         <TextView
             android:layout_width="wrap_content"
@@ -63,7 +63,7 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="20dp"
             android:layout_toRightOf="@+id/tvReviewPlace"
-            android:hint="username" />
+            android:hint="user_email" />
     </RelativeLayout>
 
 

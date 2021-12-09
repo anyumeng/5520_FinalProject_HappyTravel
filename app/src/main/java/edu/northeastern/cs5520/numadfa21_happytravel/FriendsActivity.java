@@ -2,7 +2,6 @@ package edu.northeastern.cs5520.numadfa21_happytravel;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,11 +10,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.tasks.Task;
-import com.google.android.libraries.places.api.Places;
-import com.google.android.libraries.places.api.model.Place;
-import com.google.android.libraries.places.api.net.FetchPlaceResponse;
-import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -23,14 +17,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
-
-import edu.northeastern.cs5520.numadfa21_happytravel.place.PlaceUtils;
 
 public class FriendsActivity extends AppCompatActivity {
     private String TAG = "==========FRIENDS ACTIVITY==============";
@@ -59,8 +48,6 @@ public class FriendsActivity extends AppCompatActivity {
 
         Log.v(TAG, currentUserName);
         Log.v(TAG, currentUser);
-//        friendSet.add("ym an");
-
         // get the friend user id list of the current user
         // show the posts of the given user
         DatabaseReference reference_user =
@@ -76,7 +63,7 @@ public class FriendsActivity extends AppCompatActivity {
                     if(userInfo.getUserName().equals(currentUserName)) {
                         ArrayList<String> friendList = userInfo.getFriends();
                         friendSet.addAll(friendList);
-                        Log.v(TAG, "Get all friend ids");
+                        Log.v(TAG, String.format("Get all friend ids: %s", userInfo));
                         break;
                     }
                 }
@@ -89,15 +76,6 @@ public class FriendsActivity extends AppCompatActivity {
         });
 
         Log.v(TAG, String.valueOf(friendSet.size()));
-
-        // transfer place id to place name
-        // create the place client
-//        if (!Places.isInitialized()) {
-//            Places.initialize(getApplicationContext(), "AIzaSyDxBQXCrUd95_va2_cSBz-KeadVfoa1Vio");
-//        }
-//        PlacesClient client = Places.createClient(getApplicationContext());
-
-
         Log.v(TAG, "start to get friend post");
 
         // show the posts of the given user
@@ -111,7 +89,7 @@ public class FriendsActivity extends AppCompatActivity {
                     TravelHistory travelHistory = snapshot.getValue(TravelHistory.class);
 
                     // should change to friendSet.contains(travelHistory.getUser_name())
-                    if(friendSet.contains(travelHistory.getUser_name())) {
+                    if(friendSet.contains(travelHistory.getUser_id())) {
                         if(travelHistory.getReview_photo_path() == null) {
                             images.add("");
                         }else {
@@ -119,14 +97,6 @@ public class FriendsActivity extends AppCompatActivity {
                         }
 
                         names.add(travelHistory.getUser_name());
-
-//                        PlaceUtils.getPlace(travelHistory.getPlace_id(), client).addOnCompleteListener(
-//                                task -> {
-//                                    Log.v(TAG, "each place");
-//                                    Log.v(TAG, task.getResult().getPlace().getName());
-//                                    places.add(task.getResult().getPlace().getName());
-//                        });
-
                         places.add(travelHistory.getPlace_name());
                         review_stars.add(Float.parseFloat(travelHistory.getReview_stars()));
                         review_contents.add(travelHistory.getReview_content());

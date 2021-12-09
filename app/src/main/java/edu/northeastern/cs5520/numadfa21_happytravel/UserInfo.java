@@ -105,4 +105,19 @@ public class UserInfo {
     public void setFriends(ArrayList<String> friends) {
         this.friends = friends;
     }
+
+    @Override
+    public String toString() {
+        return "UserInfo{" +
+                "key='" + key + '\'' +
+                ", userName='" + userName + '\'' +
+                ", email='" + email + '\'' +
+                ", region='" + region + '\'' +
+                ", birthday='" + birthday + '\'' +
+                ", imageUrl='" + imageUrl + '\'' +
+                ", profileUrl='" + profileUrl + '\'' +
+                ", post=" + post +
+                ", friends=" + friends +
+                '}';
+    }
 }
