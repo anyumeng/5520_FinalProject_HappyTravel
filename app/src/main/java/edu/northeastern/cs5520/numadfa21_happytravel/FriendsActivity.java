@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -38,18 +39,21 @@ public class FriendsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friends);
 
-        // first get the current user name
-        String currentUser = "";
-        GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(this);
-        if(signInAccount != null){
-            currentUser = signInAccount.getDisplayName();
-        }
-        String currentUserName = currentUser;
+//        // first get the current user name
+//        String currentUser = "";
+//        GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(this);
+//        if(signInAccount != null){
+//            currentUser = signInAccount.getDisplayName();
+//        }
+//        String currentUserName = currentUser;
+//        Log.v(TAG, currentUserName);
+//        Log.v(TAG, currentUser);
 
-        Log.v(TAG, currentUserName);
-        Log.v(TAG, currentUser);
-        // get the friend user id list of the current user
-        // show the posts of the given user
+        // first get the current user id
+        String currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        Log.v(TAG, currentUserId);
+
+        // get the friend list of the current user
         DatabaseReference reference_user =
                 FirebaseDatabase.getInstance().getReference().child("UserInfo");
 
@@ -60,7 +64,7 @@ public class FriendsActivity extends AppCompatActivity {
                     UserInfo userInfo = snapshot.getValue(UserInfo.class);
 
                     // find the current user
-                    if(userInfo.getUserName().equals(currentUserName)) {
+                    if(snapshot.getKey().equals(currentUserId)) {
                         ArrayList<String> friendList = userInfo.getFriends();
                         friendSet.addAll(friendList);
                         Log.v(TAG, String.format("Get all friend ids: %s", userInfo));
@@ -75,8 +79,6 @@ public class FriendsActivity extends AppCompatActivity {
             }
         });
 
-        Log.v(TAG, String.valueOf(friendSet.size()));
-        Log.v(TAG, "start to get friend post");
 
         // show the posts of the given user
         DatabaseReference reference =
@@ -88,7 +90,6 @@ public class FriendsActivity extends AppCompatActivity {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     TravelHistory travelHistory = snapshot.getValue(TravelHistory.class);
 
-                    // should change to friendSet.contains(travelHistory.getUser_name())
                     if(friendSet.contains(travelHistory.getUser_id())) {
                         if(travelHistory.getReview_photo_path() == null) {
                             images.add("");
@@ -109,6 +110,7 @@ public class FriendsActivity extends AppCompatActivity {
                 }
 
                 Log.v(TAG, "generate view");
+
                 recyclerView = findViewById(R.id.recyclerViewFriends);
                 FriendAdpater friendAdapter = new FriendAdpater(FriendsActivity.this,
                         images.toArray(new String[images.size()]),
