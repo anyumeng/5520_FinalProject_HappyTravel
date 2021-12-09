@@ -24,6 +24,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
+import java.util.Map;
+
+import edu.northeastern.cs5520.numadfa21_happytravel.model.PlaceTypeMapping;
 
 
 public class HomePagePostAdaptor extends RecyclerView.Adapter<HomePagePostHolder> {
@@ -144,6 +147,22 @@ public class HomePagePostAdaptor extends RecyclerView.Adapter<HomePagePostHolder
                     Toast.makeText(context, "Record is deleted", Toast.LENGTH_SHORT).show();
                 }).addOnFailureListener(fail->{
                     Toast.makeText(context, "Fail to delete", Toast.LENGTH_SHORT).show();
+                });
+                String userKey = history.getUser_id();
+                String type = PlaceTypeMapping.getIdByName(history.getType());
+                DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("UserInfo").child(userKey);
+                userRef.get().addOnCompleteListener(task ->  {
+                    if(task.isSuccessful()) {
+                        UserInfo user = task.getResult().getValue(UserInfo.class);
+                        Map<String, Integer> post = user.getPost();
+                        if(post.containsKey(type)) {
+                            post.put(type, post.get(type) - 1);
+                        }
+                        if(post.containsKey("post")) {
+                            post.put("post", post.get("post") - 1);
+                        }
+                        userRef.child("post").setValue(post);
+                    }
                 });
                 postList.remove(position);
                 historyList.remove(position);

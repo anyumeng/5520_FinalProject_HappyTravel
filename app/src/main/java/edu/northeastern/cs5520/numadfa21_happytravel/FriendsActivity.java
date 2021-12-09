@@ -96,7 +96,7 @@ public class FriendsActivity extends AppCompatActivity {
                         }else {
                             images.add(travelHistory.getReview_photo_path());
                         }
-
+                        Log.v(TAG, travelHistory.toString());
                         names.add(travelHistory.getUser_name());
                         places.add(travelHistory.getPlace_name());
                         review_stars.add(Float.parseFloat(travelHistory.getReview_stars()));

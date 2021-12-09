@@ -52,15 +52,15 @@ public class UserHomePage extends AppCompatActivity {
     public String ITEM_NUM = "ITEM_NUM", KEY = "POST";
     private StorageReference storageRef = FirebaseStorage.getInstance().getReference();
     public int REQUEST_CODE;
-    private ImageView cover, profile, menu, popupProfile, addFriendButton, addFriendProfile, postImg;
+    private ImageView cover, profile, menu, popupProfile, addFriendButton, addFriendProfile;
     private FloatingActionButton fabCover, fabProfile;
     private String cameraPermission[];
     private String storagePermission[];
     private AlertDialog.Builder dialogBuilder;
     private AlertDialog dialog;
     private EditText edtUserName, edtBirthday, edtRegion, edtFriend;
-    private TextView tvUserName, tvError, tvFollowedError, tvPostPlace, tvPostContent, tvPostTime;
-    private Button btnSubmit, btnCancel, btnFollow, btnFollowCancel, btnDelete, btnBack;
+    private TextView tvUserName, tvError, tvFollowedError;
+    private Button btnSubmit, btnCancel, btnFollow, btnFollowCancel;
     private RatingBar ratingBarPost;
     private RecyclerView recyclerView;
     private HomePagePostAdaptor adaptor;
