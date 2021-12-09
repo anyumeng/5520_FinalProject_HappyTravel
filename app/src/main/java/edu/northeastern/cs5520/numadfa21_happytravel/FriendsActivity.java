@@ -50,13 +50,16 @@ public class FriendsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_friends);
 
         // first get the current user name
-        String currentUserName = "ym an";
-//        GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(this);
-//        if(signInAccount != null){
-//            currentUserName = signInAccount.getDisplayName();
-//        }
+        String currentUser = "";
+        GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(this);
+        if(signInAccount != null){
+            currentUser = signInAccount.getDisplayName();
+        }
+        String currentUserName = currentUser;
+
         Log.v(TAG, currentUserName);
-        friendSet.add("ym an");
+        Log.v(TAG, currentUser);
+//        friendSet.add("ym an");
 
         // get the friend user id list of the current user
         // show the posts of the given user
