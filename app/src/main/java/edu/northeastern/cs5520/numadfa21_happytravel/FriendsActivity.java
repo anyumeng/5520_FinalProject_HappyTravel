@@ -88,6 +88,7 @@ public class FriendsActivity extends AppCompatActivity {
             }
         });
 
+        Log.v(TAG, String.valueOf(friendSet.size()));
 
         // transfer place id to place name
         // create the place client
