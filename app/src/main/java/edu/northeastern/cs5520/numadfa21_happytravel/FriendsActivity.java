@@ -94,13 +94,13 @@ public class FriendsActivity extends AppCompatActivity {
                         if(travelHistory.getReview_photo_path() == null) {
                             images.add("");
                         }else {
-                            images.add(travelHistory.getReview_photo_path());
+                            images.add(0, travelHistory.getReview_photo_path());
                         }
 
-                        names.add(travelHistory.getUser_name());
-                        places.add(travelHistory.getPlace_name());
-                        review_stars.add(Float.parseFloat(travelHistory.getReview_stars()));
-                        review_contents.add(travelHistory.getReview_content());
+                        names.add(0, travelHistory.getUser_name());
+                        places.add(0, travelHistory.getPlace_name());
+                        review_stars.add(0, Float.parseFloat(travelHistory.getReview_stars()));
+                        review_contents.add(0, travelHistory.getReview_content());
                     }
                 }
 
