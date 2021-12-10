@@ -9,7 +9,8 @@
     <string name="place">Place</string>
     <string name="review_content">Review Content</string>
     <string name="ratings">Your Rating</string>
-    <string name="check_in">Check In!!!!</string>
+    <string name="check_in">Check In!</string>
     <string name="reward_name">Reward Name</string>
     <string name="progress">Progress</string>
+    <string name="review_hint">Input your review here</string>
 </resources>

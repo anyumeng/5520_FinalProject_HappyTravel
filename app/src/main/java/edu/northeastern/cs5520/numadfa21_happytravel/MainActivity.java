@@ -215,7 +215,7 @@ public class MainActivity extends AppCompatActivity
         if (!this.selectedPlaceId.isPresent()) {
             Toast.makeText(
                             this,
-                            String.format("You must select a place before check-in!"),
+                            String.format("Please click a place before check-in!"),
                             Toast.LENGTH_LONG)
                     .show();
             return;
