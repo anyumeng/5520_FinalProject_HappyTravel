@@ -55,6 +55,8 @@ public class ArtAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     .using(new FirebaseImageLoader())
                     .load(storageReference)
                     .into(normalHolder.image);
+        } else {
+            normalHolder.image.setImageResource(0);
         }
 
 

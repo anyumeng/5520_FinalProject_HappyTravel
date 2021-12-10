@@ -1,6 +1,6 @@
 package edu.northeastern.cs5520.numadfa21_happytravel;
 
-public class TravelHistory {
+public class TravelHistory implements Comparable<TravelHistory> {
     private String place_id;
     private String place_name = "";
     private String review_content;
@@ -130,5 +130,10 @@ public class TravelHistory {
                 ", user_email='" + user_email + '\'' +
                 ", key='" + key + '\'' +
                 '}';
+    }
+
+    @Override
+    public int compareTo(TravelHistory travelHistory) {
+        return travelHistory.getReview_stars().compareTo(this.getReview_stars());
     }
 }

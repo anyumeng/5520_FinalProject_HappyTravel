@@ -89,6 +89,13 @@ public class RecommendationActivity extends AppCompatActivity {
             @Override
 
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                list.clear();
+                artList.clear();
+                eatList.clear();
+                natureList.clear();
+                sportList.clear();
+                otherList.clear();
+                totalList.clear();
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     TravelHistory travelHistory = dataSnapshot.getValue(TravelHistory.class);
                     TravelHistory history = new TravelHistory();

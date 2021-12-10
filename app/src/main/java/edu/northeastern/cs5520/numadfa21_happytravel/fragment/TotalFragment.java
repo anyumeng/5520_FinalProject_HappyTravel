@@ -1,6 +1,7 @@
 package edu.northeastern.cs5520.numadfa21_happytravel.fragment;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -73,15 +74,7 @@ public class TotalFragment extends Fragment{
             newArrayList.add(travelHistory);
         });
 
-        Collections.sort(newArrayList, new Comparator<TravelHistory>() {
-            public int compare(TravelHistory o1,
-                               TravelHistory o2) {
-                Double d1 = Double.valueOf(o1.getReview_stars());
-                Double d2 = Double.valueOf(o2.getReview_stars());
-                return d1.compareTo(d2);
-            }
-        });
-        Collections.reverse(newArrayList);
+        Collections.sort(newArrayList);
 
         //linearLayout
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());

@@ -12,12 +12,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import edu.northeastern.cs5520.numadfa21_happytravel.R;
 import edu.northeastern.cs5520.numadfa21_happytravel.TravelHistory;
 import edu.northeastern.cs5520.numadfa21_happytravel.recommendationadapter.ArtAdapter;
-import edu.northeastern.cs5520.numadfa21_happytravel.bean.CommonBean;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -71,15 +69,7 @@ public class ArtFragment extends Fragment {
             newArrayList.add(travelHistory);
         });
 
-        Collections.sort(newArrayList, new Comparator<TravelHistory>() {
-            public int compare(TravelHistory o1,
-                               TravelHistory o2) {
-                Double d1 = Double.valueOf(o1.getReview_stars());
-                Double d2 = Double.valueOf(o2.getReview_stars());
-                return d1.compareTo(d2);
-            }
-        });
-        Collections.reverse(newArrayList);
+        Collections.sort(newArrayList);
 
         //linearLayout
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
