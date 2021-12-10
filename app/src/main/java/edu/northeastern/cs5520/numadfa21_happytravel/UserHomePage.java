@@ -342,9 +342,10 @@ public class UserHomePage extends AppCompatActivity {
                             if (myself.getFriends().contains(friend.getKey())) {
                                 Toast.makeText(UserHomePage.this, String.format("You've followed: %s", friend.getUserName()), Toast.LENGTH_SHORT).show();
                             } else {
-                                Toast.makeText(UserHomePage.this, String.format("Follow successfully: %s", friend.getUserName()), Toast.LENGTH_SHORT).show();
                                 myself.getFriends().add(friend.getKey());
                                 userRef.child(myself.getKey()).child("friends").setValue(myself.getFriends());
+                                Toast.makeText(UserHomePage.this, String.format("Follow successfully: %s", friend.getUserName()), Toast.LENGTH_SHORT).show();
+                                dialog.dismiss();
                             }
                             return;
                         }
