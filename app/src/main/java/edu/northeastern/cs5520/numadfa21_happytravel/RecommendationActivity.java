@@ -39,9 +39,9 @@ public class RecommendationActivity extends AppCompatActivity {
 
     private static final int nature = 2;
 
-    private static final int other = 3;
+    private static final int sport = 3;
 
-    private static final int sport = 4;
+    private static final int other = 4;
 
     private static final int total= 5;
 
@@ -110,11 +110,11 @@ public class RecommendationActivity extends AppCompatActivity {
                     if (travelHistory.getType().contains("Nature")){
                         natureList.add(travelHistory);
                     }
-                    if (travelHistory.getType().contains("Other")){
-                        otherList.add(travelHistory);
-                    }
                     if (travelHistory.getType().contains("Sport")){
                         sportList.add(travelHistory);
+                    }
+                    if (travelHistory.getType().contains("Other")){
+                        otherList.add(travelHistory);
                     }
                     if (travelHistory.getType().contains("Art")||
                             travelHistory.getType().contains("Eat")||
@@ -185,19 +185,19 @@ public class RecommendationActivity extends AppCompatActivity {
             } else {
                 transaction.show(natureFragment);
             }
-        } else if (other == position) {
-            if (otherFragment == null) {
-                otherFragment = OtherFragment.newInstance(otherList);
-                transaction.add(R.id.frgContainerView, otherFragment);
-            } else {
-                transaction.show(otherFragment);
-            }
         } else if (sport == position) {
             if (sportFragment == null) {
                 sportFragment = SportFragment.newInstance(sportList);
                 transaction.add(R.id.frgContainerView, sportFragment);
             } else {
                 transaction.show(sportFragment);
+            }
+        } else if (other == position) {
+            if (otherFragment == null) {
+                otherFragment = OtherFragment.newInstance(otherList);
+                transaction.add(R.id.frgContainerView, otherFragment);
+            } else {
+                transaction.show(otherFragment);
             }
         } else if (total == position) {
             if (totalFragment == null) {
