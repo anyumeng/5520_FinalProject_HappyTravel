@@ -8,8 +8,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -26,13 +24,10 @@ public class FriendsActivity extends AppCompatActivity {
     private String TAG = "==========FRIENDS ACTIVITY==============";
 
     private RecyclerView recyclerView;
+    private FriendAdapter adapter;
 
     private Set<String> friendSet = new HashSet<>();
-    private List<String> images = new ArrayList<>();
-    private List<String> names = new ArrayList<>();
-    private List<String> places = new ArrayList<>();
-    private List<Float> review_stars = new ArrayList<>();
-    private List<String> review_contents = new ArrayList<>();
+    private List<FriendPost> posts = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +75,8 @@ public class FriendsActivity extends AppCompatActivity {
         });
 
 
+        initRecyclerView();
+
         // show the posts of the given user
         DatabaseReference reference =
                 FirebaseDatabase.getInstance().getReference().child("TravelHistory");
@@ -87,38 +84,26 @@ public class FriendsActivity extends AppCompatActivity {
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                int size = posts.size();
+                posts.clear();
+                adapter.notifyItemRangeRemoved(0, size);
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     TravelHistory travelHistory = snapshot.getValue(TravelHistory.class);
-
                     if(friendSet.contains(travelHistory.getUser_id())) {
+                        FriendPost post = new FriendPost();
                         if(travelHistory.getReview_photo_path() == null) {
-                            images.add("");
-                        }else {
-                            images.add(0, travelHistory.getReview_photo_path());
+                            post.setImageUrl("");
+                        } else {
+                            post.setImageUrl(travelHistory.getReview_photo_path());
                         }
-                        names.add(0, travelHistory.getUser_name());
-                        places.add(0, travelHistory.getPlace_name());
-                        review_stars.add(0, Float.parseFloat(travelHistory.getReview_stars()));
-                        review_contents.add(0, travelHistory.getReview_content());
+                        post.setUserName(travelHistory.getUser_name());
+                        post.setPlaceName(travelHistory.getPlace_name());
+                        post.setReviewStars(Float.parseFloat(travelHistory.getReview_stars()));
+                        post.setContent(travelHistory.getReview_content());
+                        posts.add(0, post);
                     }
                 }
-
-                float[] review_stars_array = new float[review_stars.size()];
-                for(int i = 0; i < review_stars.size(); i++) {
-                    review_stars_array[i] = review_stars.get(i);
-                }
-
-                Log.v(TAG, "generate view");
-
-                recyclerView = findViewById(R.id.recyclerViewFriends);
-                FriendAdpater friendAdapter = new FriendAdpater(FriendsActivity.this,
-                        images.toArray(new String[images.size()]),
-                        names.toArray(new String[names.size()]),
-                        places.toArray(new String[places.size()]),
-                        review_stars_array,
-                        review_contents.toArray(new String[review_contents.size()]));
-                recyclerView.setAdapter(friendAdapter);
-                recyclerView.setLayoutManager(new LinearLayoutManager(FriendsActivity.this));
+                adapter.notifyDataSetChanged();
             }
 
             @Override
@@ -127,5 +112,13 @@ public class FriendsActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void initRecyclerView() {
+        recyclerView = findViewById(R.id.recyclerViewFriends);
+        recyclerView.setHasFixedSize(true);
+        adapter = new FriendAdapter(FriendsActivity.this, this.posts);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(FriendsActivity.this));
     }
 }

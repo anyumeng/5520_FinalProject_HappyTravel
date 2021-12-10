@@ -1,6 +1,7 @@
 package edu.northeastern.cs5520.numadfa21_happytravel;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,28 +17,18 @@ import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.util.List;
 
-public class FriendAdpater extends RecyclerView.Adapter<FriendAdpater.FriendViewHolder> {
+
+public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendViewHolder> {
     private Context context;
-    private String[] images;
-    private String[] names;
-    private String[] places;
-    private float[] review_stars;
-    private String[] review_contents;
+    private List<FriendPost> posts;
 
-    public FriendAdpater(
+    public FriendAdapter(
             Context ct,
-            String[] images,
-            String[] names,
-            String[] places,
-            float[] review_stars,
-            String[] review_contents) {
+            List<FriendPost> posts) {
         this.context = ct;
-        this.images = images;
-        this.names = names;
-        this.places = places;
-        this.review_stars = review_stars;
-        this.review_contents = review_contents;
+        this.posts = posts;
     }
 
     @NonNull
@@ -50,25 +41,27 @@ public class FriendAdpater extends RecyclerView.Adapter<FriendAdpater.FriendView
 
     @Override
     public void onBindViewHolder(@NonNull FriendViewHolder holder, int position) {
-        if(!images[position].equals("")) {
-            StorageReference storageReference = FirebaseStorage.getInstance().getReference().child(images[position]);
+        FriendPost post = posts.get(position);
+        if(!post.getImageUrl().isEmpty()) {
+            StorageReference storageReference = FirebaseStorage.getInstance().getReference().child(post.getImageUrl());
             Glide.with(context)
                     .using(new FirebaseImageLoader())
                     .load(storageReference)
                     .into(holder.image);
+        } else {
+            holder.image.setImageResource(0);
         }
-
         holder.marker.setImageResource(R.drawable.marker);
-        holder.name.setText(names[position]);
-        holder.place.setText(places[position]);
-        holder.review_content.setText(review_contents[position]);
+        holder.name.setText(post.getUserName());
+        holder.place.setText(post.getPlaceName());
+        holder.review_content.setText(post.getContent());
         // review star
-        holder.review_star.setRating(review_stars[position]);
+        holder.review_star.setRating(post.getReviewStars());
     }
 
     @Override
     public int getItemCount() {
-        return names.length;
+        return posts.size();
     }
 
     public class FriendViewHolder extends RecyclerView.ViewHolder {
