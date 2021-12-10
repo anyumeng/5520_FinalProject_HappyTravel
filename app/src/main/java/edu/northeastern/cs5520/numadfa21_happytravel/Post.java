@@ -61,4 +61,15 @@ public class Post {
     public void setStar(String star) {
         this.star = star;
     }
+
+    @Override
+    public String toString() {
+        return "Post{" +
+                "imageUrl='" + imageUrl + '\'' +
+                ", context=" + context +
+                ", place='" + place + '\'' +
+                ", time='" + time + '\'' +
+                ", star='" + star + '\'' +
+                '}';
+    }
 }

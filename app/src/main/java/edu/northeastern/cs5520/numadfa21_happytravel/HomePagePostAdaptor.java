@@ -1,8 +1,8 @@
 package edu.northeastern.cs5520.numadfa21_happytravel;
 
 import android.content.Context;
-import android.media.Image;
 import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +17,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
@@ -64,6 +65,7 @@ public class HomePagePostAdaptor extends RecyclerView.Adapter<HomePagePostHolder
     @Override
     public void onBindViewHolder(@NonNull HomePagePostHolder holder, int position) {
         Post post = postList.get(position);
+        Log.w("history", post.toString());
         holder.context = this.context;
         holder.ratingBar.setRating(Float.parseFloat(post.getStar()));
         holder.tvPlace.setText(post.getPlace());
@@ -72,17 +74,11 @@ public class HomePagePostAdaptor extends RecyclerView.Adapter<HomePagePostHolder
             holder.imageView.setImageResource(R.mipmap.ic_launcher);
         }
         else {
-            reference.child(post.getImageUrl()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                @Override
-                public void onSuccess(Uri uri) {
-                    Glide.with(context).load(uri.toString()).into(holder.imageView);
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception exception) {
-                    // Handle any errors
-                }
-            });
+            Glide.with(context)
+                 .using(new FirebaseImageLoader())
+                 .load(reference.child(post.getImageUrl()))
+                 .override(200, 200)
+                 .into(holder.imageView);
         }
 
         holder.cardView.setOnClickListener(new View.OnClickListener() {
