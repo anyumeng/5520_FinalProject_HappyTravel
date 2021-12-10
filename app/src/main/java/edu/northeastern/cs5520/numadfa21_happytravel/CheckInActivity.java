@@ -194,5 +194,7 @@ public class CheckInActivity extends AppCompatActivity {
         });
 
         Toast.makeText(this, "Check in successfully!", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 }
