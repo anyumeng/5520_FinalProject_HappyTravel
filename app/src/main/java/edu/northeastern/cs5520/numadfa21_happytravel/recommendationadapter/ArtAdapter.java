@@ -47,7 +47,7 @@ public class ArtAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         TravelHistory commonBean = datas.get(position);
         normalHolder.tv1.setText(String.valueOf(position+1));
         normalHolder.tv2.setText(commonBean.getPlace_name());
-        normalHolder.tv3.setText(commonBean.getReview_stars().substring(0,3));
+        normalHolder.tv3.setText("Avg Rating: " + commonBean.getReview_stars().substring(0,3));
 
         if (!TextUtils.isEmpty(commonBean.getReview_photo_path())){
             StorageReference storageReference = FirebaseStorage.getInstance().getReference().child(commonBean.getReview_photo_path());
