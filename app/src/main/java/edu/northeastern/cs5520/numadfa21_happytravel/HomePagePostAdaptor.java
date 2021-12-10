@@ -24,8 +24,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.StorageReference;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.TimeZone;
 
 import edu.northeastern.cs5520.numadfa21_happytravel.model.PlaceTypeMapping;
 
@@ -69,7 +74,10 @@ public class HomePagePostAdaptor extends RecyclerView.Adapter<HomePagePostHolder
         holder.context = this.context;
         holder.ratingBar.setRating(Float.parseFloat(post.getStar()));
         holder.tvPlace.setText(post.getPlace());
-        holder.tvTime.setText(post.getTime());
+        Instant time = Instant.parse(post.getTime());
+        ZonedDateTime dateTime = time.atZone(TimeZone.getDefault().toZoneId());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        holder.tvTime.setText(formatter.format(dateTime));
         if (post.getImageUrl().equals("")) {
             holder.imageView.setImageResource(R.mipmap.ic_launcher);
         }
