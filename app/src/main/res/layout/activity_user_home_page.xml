@@ -9,7 +9,7 @@
     <ImageView
         android:id="@+id/imgBg"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="0dp"
         android:scaleType="centerCrop"
         android:src="@mipmap/bg_grey"
         app:layout_constraintEnd_toEndOf="parent"
