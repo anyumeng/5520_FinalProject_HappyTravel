@@ -47,7 +47,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 public class UserHomePage extends AppCompatActivity {
-    public String TAG = "UserHomePage";
     public static final int CAMERA_REQUEST = 200, STORAGE_REQUEST = 300, COVER_CODE = 10, PROFILE_CODE = 20;
     public String ITEM_NUM = "ITEM_NUM", KEY = "POST";
     private StorageReference storageRef = FirebaseStorage.getInstance().getReference();
@@ -61,7 +60,6 @@ public class UserHomePage extends AppCompatActivity {
     private EditText edtUserName, edtBirthday, edtRegion, edtFriend;
     private TextView tvUserName, tvError, tvFollowedError;
     private Button btnSubmit, btnCancel, btnFollow, btnFollowCancel;
-    private RatingBar ratingBarPost;
     private RecyclerView recyclerView;
     private HomePagePostAdaptor adaptor;
     private static ArrayList<Post> postList = new ArrayList<>();
@@ -419,6 +417,9 @@ public class UserHomePage extends AppCompatActivity {
         });
     }
 
+    /**
+     * search traver history from firebase realtime database and display in recyclerview
+     */
     private void searchHistory() {
         DatabaseReference historyRef = FirebaseDatabase.getInstance().getReference("TravelHistory");
         historyRef.orderByChild("user_id")
@@ -430,9 +431,7 @@ public class UserHomePage extends AppCompatActivity {
                         historyList.clear();
                         postList.clear();
                         adaptor.notifyItemRangeRemoved(0, size);
-                        int i = 0;
                         for (DataSnapshot childSnapshot: dataSnapshot.getChildren()) {
-//                            UserInfo user = childSnapshot.getValue(UserInfo.class);
                             TravelHistory history = childSnapshot.getValue(TravelHistory.class);
                             history.setKey(childSnapshot.getKey());
                             historyList.add(0, history);
@@ -447,11 +446,11 @@ public class UserHomePage extends AppCompatActivity {
 
                     }
                 });
-
-
-
     }
 
+    /**
+     * Check the format of revised personal info
+     */
     private boolean isValidInfo(String userName, String birthday) {
         if(userName == null || userName.isEmpty() || birthday == null) {
             return false;
@@ -471,6 +470,9 @@ public class UserHomePage extends AppCompatActivity {
         }
     }
 
+    /**
+     * Create the setting dialog that let user change their profiles.
+     */
     private void uploadPhoto(Uri uri, int code){
         String folder = code == COVER_CODE ? "covers" : "profiles";
         String filePath = String.format("%s/%s", folder, UUID.randomUUID().toString());
@@ -524,11 +526,6 @@ public class UserHomePage extends AppCompatActivity {
         adaptor.setHistoryList(historyList);
         recyclerView.setAdapter(adaptor);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-    }
-
-    public void addItem(int pos, Post newPost) {
-        postList.add(pos, newPost);
-        adaptor.notifyItemInserted(pos);
     }
 
 }
