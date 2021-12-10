@@ -26,7 +26,7 @@ import edu.northeastern.cs5520.numadfa21_happytravel.recommendationadapter.Natur
 public class NatureFragment extends Fragment{
 
     public RecyclerView recyclerView;
-    public NatureAdapter artAdapter;
+    public NatureAdapter natureAdapter;
 
     public NatureFragment() {
         // Required empty public constructor
@@ -55,12 +55,12 @@ public class NatureFragment extends Fragment{
         List<TravelHistory> list = new ArrayList<>();
         list = (List<TravelHistory>) bundle.getSerializable("mapList");
 
-        //对形同地点进行秋分均分
+        // Inflate the layout for this fragment
         Map<String, List<TravelHistory>> map = groupList(list);
         List<TravelHistory> newArrayList = new ArrayList<>();
         map.forEach((x, y) -> {
             List<TravelHistory> travelHistoryList = y;
-            //对相同名字的数据就行求平均分，并放入一个list中
+            //put data in a list
             Double d = 0.0;
             for (int i = 0; i < travelHistoryList.size(); i++) {
                 d = Double.parseDouble(travelHistoryList.get(i).getReview_stars()) + d;
@@ -86,8 +86,8 @@ public class NatureFragment extends Fragment{
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(linearLayoutManager);
-        artAdapter = new NatureAdapter(getActivity(), newArrayList);
-        recyclerView.setAdapter(artAdapter);
+        natureAdapter = new NatureAdapter(getActivity(), newArrayList);
+        recyclerView.setAdapter(natureAdapter);
 
         return inflate;
     }

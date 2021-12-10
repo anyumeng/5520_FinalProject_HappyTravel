@@ -29,16 +29,16 @@
             android:name=".RecommendationActivity"
             android:exported="true"
             android:configChanges="orientation|screenSize|keyboardHidden">
+
+        </activity>
+        <activity
+            android:name=".LoginActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity
-            android:name=".LoginActivity"
-            android:exported="true">
-
         </activity>
         <activity
             android:name=".RewardActivity"

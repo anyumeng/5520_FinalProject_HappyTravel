@@ -59,6 +59,12 @@ public class RecommendationActivity extends AppCompatActivity {
     private List<TravelHistory> eatList = new ArrayList<>();
     //nature
     private List<TravelHistory> natureList = new ArrayList<>();
+    //other
+    private List<TravelHistory> otherList = new ArrayList<>();
+    //sport
+    private List<TravelHistory> sportList = new ArrayList<>();
+    //total
+    private List<TravelHistory> totalList = new ArrayList<>();
 
     private DatabaseReference root = FirebaseDatabase.getInstance().getReference().child("TravelHistory");
 
@@ -104,7 +110,20 @@ public class RecommendationActivity extends AppCompatActivity {
                     if (travelHistory.getType().contains("Nature")){
                         natureList.add(travelHistory);
                     }
+                    if (travelHistory.getType().contains("Other")){
+                        otherList.add(travelHistory);
+                    }
+                    if (travelHistory.getType().contains("Sport")){
+                        sportList.add(travelHistory);
+                    }
+                    if (travelHistory.getType().contains("Art")||
+                            travelHistory.getType().contains("Eat")||
+                            travelHistory.getType().contains("Nature")||
+                            travelHistory.getType().contains("Other")||
+                            travelHistory.getType().contains("Sport")){
+                        totalList.add(travelHistory);
 
+                    }
                 }
 
                 initFragment(0);
@@ -168,21 +187,21 @@ public class RecommendationActivity extends AppCompatActivity {
             }
         } else if (other == position) {
             if (otherFragment == null) {
-                otherFragment = OtherFragment.newInstance();
+                otherFragment = OtherFragment.newInstance(otherList);
                 transaction.add(R.id.frgContainerView, otherFragment);
             } else {
                 transaction.show(otherFragment);
             }
         } else if (sport == position) {
             if (sportFragment == null) {
-                sportFragment = SportFragment.newInstance();
+                sportFragment = SportFragment.newInstance(sportList);
                 transaction.add(R.id.frgContainerView, sportFragment);
             } else {
                 transaction.show(sportFragment);
             }
         } else if (total == position) {
             if (totalFragment == null) {
-                totalFragment = TotalFragment.newInstance();
+                totalFragment = TotalFragment.newInstance(totalList);
                 transaction.add(R.id.frgContainerView, totalFragment);
             } else {
                 transaction.show(totalFragment);
