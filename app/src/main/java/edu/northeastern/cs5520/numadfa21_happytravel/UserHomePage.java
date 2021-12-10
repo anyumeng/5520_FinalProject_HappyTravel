@@ -434,9 +434,9 @@ public class UserHomePage extends AppCompatActivity {
 //                            UserInfo user = childSnapshot.getValue(UserInfo.class);
                             TravelHistory history = childSnapshot.getValue(TravelHistory.class);
                             history.setKey(childSnapshot.getKey());
-                            historyList.add(history);
+                            historyList.add(0, history);
                             Post post = new Post(history.getReview_photo_path(), UserHomePage.this, history.getPlace_name(), history.getReview_time(), history.getReview_stars());
-                            postList.add(post);
+                            postList.add(0, post);
                         }
                         adaptor.notifyDataSetChanged();
                     }
