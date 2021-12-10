@@ -16,20 +16,19 @@ import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-import edu.northeastern.cs5520.numadfa21_happytravel.R;
-import edu.northeastern.cs5520.numadfa21_happytravel.TravelHistory;
-import edu.northeastern.cs5520.numadfa21_happytravel.bean.CommonBean;
-
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.northeastern.cs5520.numadfa21_happytravel.R;
+import edu.northeastern.cs5520.numadfa21_happytravel.TravelHistory;
 
-public class ArtAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+
+public class TotalAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context mContext;
     private List<TravelHistory> datas = new ArrayList<>();
 
-    public ArtAdapter(Context context, List<TravelHistory> datas) {
+    public TotalAdapter(Context context, List<TravelHistory> datas) {
         mContext = context;
         this.datas = datas;
     }

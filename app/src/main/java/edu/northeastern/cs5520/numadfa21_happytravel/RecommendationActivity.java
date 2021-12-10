@@ -49,13 +49,22 @@ public class RecommendationActivity extends AppCompatActivity {
     private EatFragment eatFragment;
     private NatureFragment natureFragment;
     private OtherFragment otherFragment;
-    private TotalFragment totalFragment;
     private SportFragment sportFragment;
+    private TotalFragment totalFragment;
 
-    List<CommonBean> list = new ArrayList<>();
-    private List<String> names = new ArrayList<>();
-    private List<Float> review_stars = new ArrayList<>();
-    private List<String> types = new ArrayList<>();
+    private List<TravelHistory> list = new ArrayList<>();
+    //art
+    private List<TravelHistory> artList = new ArrayList<>();
+    //eat
+    private List<TravelHistory> eatList = new ArrayList<>();
+    //nature
+    private List<TravelHistory> natureList = new ArrayList<>();
+    //other
+    private List<TravelHistory> otherList = new ArrayList<>();
+    //sport
+    private List<TravelHistory> sportList = new ArrayList<>();
+    //total
+    private List<TravelHistory> totalList = new ArrayList<>();
 
     private DatabaseReference root = FirebaseDatabase.getInstance().getReference().child("TravelHistory");
 
@@ -67,6 +76,7 @@ public class RecommendationActivity extends AppCompatActivity {
         //View decorView = getWindow().getDecorView();
         //decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
         //getWindow().setStatusBarColor(Color.TRANSPARENT);
+
         initView();
     }
 
@@ -77,27 +87,54 @@ public class RecommendationActivity extends AppCompatActivity {
         //TODO: Add data
         root.addValueEventListener(new ValueEventListener() {
             @Override
+
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     TravelHistory travelHistory = dataSnapshot.getValue(TravelHistory.class);
-                    names.add(travelHistory.getPlace_name());
-                    review_stars.add(Float.parseFloat(travelHistory.getReview_stars()));
-                    types.add(travelHistory.getType());
+                    TravelHistory history = new TravelHistory();
+                    history.setPlace_name(travelHistory.getPlace_name());
+                    history.setType(travelHistory.getType());
+                    history.setReview_stars(travelHistory.getReview_stars());
+                    history.setReview_photo_path(travelHistory.getReview_photo_path());
+                    list.add(history);
                 }
+
+                for (TravelHistory travelHistory : list) {
+                    //Judge the types
+                    if (travelHistory.getType().contains("Art")){
+                        artList.add(travelHistory);
+                    }
+                    if (travelHistory.getType().contains("Eat")){
+                        eatList.add(travelHistory);
+                    }
+                    if (travelHistory.getType().contains("Nature")){
+                        natureList.add(travelHistory);
+                    }
+                    if (travelHistory.getType().contains("Other")){
+                        otherList.add(travelHistory);
+                    }
+                    if (travelHistory.getType().contains("Sport")){
+                        sportList.add(travelHistory);
+                    }
+                    if (travelHistory.getType().contains("Art")||
+                            travelHistory.getType().contains("Eat")||
+                            travelHistory.getType().contains("Nature")||
+                            travelHistory.getType().contains("Other")||
+                            travelHistory.getType().contains("Sport")){
+                        totalList.add(travelHistory);
+
+                    }
+                }
+
+                initFragment(0);
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
             }
         });
 
-        for (int i = 0; i < 10; i++) {
-            CommonBean commonBean = new CommonBean();
-            commonBean.setCode("NO." + i);
-            commonBean.setText("location" + i);
-            commonBean.setTest("rate" + i);
-            list.add(commonBean);
-        }
-        initFragment(0);
+
+
     }
 
     private final TabLayout.OnTabSelectedListener tabSelectedListener = new TabLayout.OnTabSelectedListener() {
@@ -128,14 +165,14 @@ public class RecommendationActivity extends AppCompatActivity {
         hideFragment(transaction);
         if (art == position) {
             if (artFragment == null) {
-                artFragment = ArtFragment.newInstance(list);
+                artFragment = ArtFragment.newInstance(artList);
                 transaction.add(R.id.frgContainerView, artFragment);
             } else {
                 transaction.show(artFragment);
             }
         } else if (eat == position) {
             if (eatFragment == null) {
-                eatFragment = EatFragment.newInstance();
+                eatFragment = EatFragment.newInstance(eatList);
                 transaction.add(R.id.frgContainerView, eatFragment);
             } else {
                 transaction.show(eatFragment);
@@ -143,28 +180,28 @@ public class RecommendationActivity extends AppCompatActivity {
 
         } else if (nature == position) {
             if (natureFragment == null) {
-                natureFragment = NatureFragment.newInstance();
+                natureFragment = NatureFragment.newInstance(natureList);
                 transaction.add(R.id.frgContainerView, natureFragment);
             } else {
                 transaction.show(natureFragment);
             }
         } else if (other == position) {
             if (otherFragment == null) {
-                otherFragment = OtherFragment.newInstance();
+                otherFragment = OtherFragment.newInstance(otherList);
                 transaction.add(R.id.frgContainerView, otherFragment);
             } else {
                 transaction.show(otherFragment);
             }
         } else if (sport == position) {
             if (sportFragment == null) {
-                sportFragment = SportFragment.newInstance();
+                sportFragment = SportFragment.newInstance(sportList);
                 transaction.add(R.id.frgContainerView, sportFragment);
             } else {
                 transaction.show(sportFragment);
             }
         } else if (total == position) {
             if (totalFragment == null) {
-                totalFragment = TotalFragment.newInstance();
+                totalFragment = TotalFragment.newInstance(totalList);
                 transaction.add(R.id.frgContainerView, totalFragment);
             } else {
                 transaction.show(totalFragment);
