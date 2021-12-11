@@ -455,7 +455,6 @@ public class UserHomePage extends AppCompatActivity {
         if(userName == null || userName.isEmpty() || birthday == null) {
             return false;
         }
-        Toast.makeText(UserHomePage.this, birthday, Toast.LENGTH_SHORT).show();
         SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy");
 
         df.setLenient(false);
@@ -464,8 +463,6 @@ public class UserHomePage extends AppCompatActivity {
             return true;
         }
         catch (ParseException e) {
-            Toast.makeText(UserHomePage.this, birthday, Toast.LENGTH_SHORT)
-                 .show();
             return false;
         }
     }
@@ -485,7 +482,6 @@ public class UserHomePage extends AppCompatActivity {
                 user.setProfileUrl(filePath);
             }
             userRef.child(user.getKey()).setValue(user);
-            Toast.makeText(UserHomePage.this, user.toString(), Toast.LENGTH_SHORT).show();
         }).addOnProgressListener(snapshot -> {
         }).addOnFailureListener(e -> {
             Toast.makeText(UserHomePage.this, "Uploading Failed !!", Toast.LENGTH_SHORT).show();
