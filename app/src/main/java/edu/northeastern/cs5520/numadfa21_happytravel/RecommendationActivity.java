@@ -2,6 +2,7 @@ package edu.northeastern.cs5520.numadfa21_happytravel;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.graphics.Color;
@@ -166,7 +167,11 @@ public class RecommendationActivity extends AppCompatActivity {
      * Initialization fragment
      */
     private void initFragment(int position) {
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        if(fragmentManager.isDestroyed()) {
+            return;
+        }
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
         //Hide fragment
         hideFragment(transaction);

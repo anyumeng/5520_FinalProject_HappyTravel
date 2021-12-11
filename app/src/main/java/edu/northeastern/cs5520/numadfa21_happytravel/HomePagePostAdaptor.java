@@ -126,7 +126,7 @@ public class HomePagePostAdaptor extends RecyclerView.Adapter<HomePagePostHolder
                 }
             });
         }
-        tvPostPlace.setText(history.getPlace_id());
+        tvPostPlace.setText(history.getPlace_name());
         tvPostContent.setText(history.getReview_content());
         tvPostTime.setText(history.getReview_time());
         ratingBarPost.setRating(Float.parseFloat(history.getReview_stars()));

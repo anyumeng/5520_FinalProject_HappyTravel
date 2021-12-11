@@ -1,6 +1,8 @@
 package edu.northeastern.cs5520.numadfa21_happytravel;
 
-public class TravelHistory implements Comparable<TravelHistory> {
+import java.io.Serializable;
+
+public class TravelHistory implements Comparable<TravelHistory>, Serializable {
     private String place_id;
     private String place_name = "";
     private String review_content;

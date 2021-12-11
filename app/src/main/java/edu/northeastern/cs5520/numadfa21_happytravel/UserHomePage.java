@@ -25,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.github.drjacky.imagepicker.ImagePicker;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -136,24 +137,10 @@ public class UserHomePage extends AppCompatActivity {
         UserInfo user = currentUser.get();
         //load image
         if (user.getImageUrl() != null && user.getImageUrl().length() > 0) {
-            storageRef.child(user.getImageUrl())
-                      .getDownloadUrl()
-                      .addOnSuccessListener(uri -> Glide.with(UserHomePage.this)
-                                                        .load(uri.toString())
-                                                        .into(cover))
-                      .addOnFailureListener(exception -> {
-                          // Handle any errors
-                      });
+            Glide.with(getApplicationContext()).using(new FirebaseImageLoader()).load(storageRef.child(user.getImageUrl())).into(cover);
         }
         if (user.getProfileUrl() != null && user.getProfileUrl().length() > 0) {
-            storageRef.child(user.getProfileUrl())
-                      .getDownloadUrl()
-                      .addOnSuccessListener(uri -> Glide.with(UserHomePage.this)
-                                                        .load(uri.toString())
-                                                        .into(profile))
-                      .addOnFailureListener(exception -> {
-                          // Handle any errors
-                      });
+            Glide.with(getApplicationContext()).using(new FirebaseImageLoader()).load(storageRef.child(user.getProfileUrl())).into(profile);
         }
         //load username
         tvUserName.setText(user.getUserName());
