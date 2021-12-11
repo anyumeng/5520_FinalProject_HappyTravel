@@ -26,6 +26,9 @@
             android:name="edu.northeastern.cs5520.numadfa21_happytravel.UserHomePage"
             android:exported="true" />
         <activity
+            android:name=".following.FollowingActivity"
+            android:exported="true" />
+        <activity
             android:name=".RecommendationActivity"
             android:exported="true"
             android:configChanges="orientation|screenSize|keyboardHidden">

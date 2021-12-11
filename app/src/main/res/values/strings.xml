@@ -13,4 +13,8 @@
     <string name="reward_name">Reward Name</string>
     <string name="progress">Progress</string>
     <string name="review_hint">Input your review here</string>
+    <string name="unfollow_button">Unfollow</string>
+    <string name="unfollow_button_yes">Unfollow</string>
+    <string name="unfollow_button_no">Cancel</string>
+    <string name="unfollow_confirm_text">Please confirm your choice:</string>
 </resources>

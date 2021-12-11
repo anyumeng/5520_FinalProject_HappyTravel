@@ -21,7 +21,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
-import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,6 +44,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.UUID;
+
+import edu.northeastern.cs5520.numadfa21_happytravel.following.FollowingActivity;
 
 public class UserHomePage extends AppCompatActivity {
     public static final int CAMERA_REQUEST = 200, STORAGE_REQUEST = 300, COVER_CODE = 10, PROFILE_CODE = 20;
@@ -254,6 +255,11 @@ public class UserHomePage extends AppCompatActivity {
                         startActivity(intentReward);
                         break;
                     }
+                    case R.id.popup_setting_following: {
+                        Intent intentFollowing = new Intent(UserHomePage.this, FollowingActivity.class);
+                        startActivity(intentFollowing);
+                        break;
+                    }
                     case R.id.popup_setting_signout:{
                         signOut();
                     }
@@ -316,6 +322,7 @@ public class UserHomePage extends AppCompatActivity {
             tvFollowedError.setVisibility(View.INVISIBLE);
             dialog.dismiss();
         });
+
 
         btnFollow.setOnClickListener(view -> {
             String friendEmail = edtFriend.getText().toString();
@@ -407,12 +414,18 @@ public class UserHomePage extends AppCompatActivity {
         DatabaseReference userRef = FirebaseDatabase.getInstance()
                                                     .getReference("UserInfo")
                                                     .child(userId);
-        userRef.get().addOnCompleteListener(task -> {
-            if(task.isSuccessful()) {
-                this.currentUser = Optional.of(task.getResult().getValue(UserInfo.class));
-                this.currentUser.get().setKey(task.getResult().getKey());
+        userRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                currentUser = Optional.of(snapshot.getValue(UserInfo.class));
+                currentUser.get().setKey(snapshot.getKey());
                 searchHistory();
                 initUserInfo();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
             }
         });
     }

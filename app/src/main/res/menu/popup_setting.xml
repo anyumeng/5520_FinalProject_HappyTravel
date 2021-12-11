@@ -11,6 +11,10 @@
         android:icon="@drawable/ic_reward"
         android:title="Reward" />
     <item
+        android:id="@+id/popup_setting_following"
+        android:icon="@drawable/ic_baseline_popup_friend_36"
+        android:title="Following" />
+    <item
         android:id="@+id/popup_setting_signout"
         android:title="Sign out" />
 </menu>
