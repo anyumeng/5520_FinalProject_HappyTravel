@@ -1,4 +1,7 @@
-## How to build and run this
+⚠️ You won't be able to build and run this repo anymore, simply because the GCP project behind 
+this is fully closed. All content below are out-dated and not useful.
+
+## (OLD) How to build and run this
 
 If you want to run the app by building the code in this repo, please make sure:
 1. The emulator has Google play;
